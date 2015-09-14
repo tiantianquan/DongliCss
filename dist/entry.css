@@ -433,11 +433,14 @@ img {
   width: 100%; }
 
 .page {
+  position: absolute;
+  visibility: hidden;
+  top: 0;
+  left: 0;
   margin: 0 auto;
   display: block;
   height: 100%;
   width: 100%;
-  position: relative;
   background-size: cover !important; }
 
 .page1 {
@@ -454,27 +457,32 @@ img {
     transform: translateY(-50%) translateX(-50%);
     width: 100%; }
     .page1 .main .txt {
-      margin: 0 auto;
+      margin: 0 auto; }
+    .page1 .main .txt.head {
+      width: 70%;
       margin-bottom: 10%;
+      -webkit-transform: translateX(500px);
+      -moz-transform: translateX(500px);
+      -ms-transform: translateX(500px);
+      -o-transform: translateX(500px);
+      transform: translateX(500px); }
+    .page1 .main .txt.sub {
+      width: 30%;
+      margin-bottom: 5%;
       -webkit-transform: translateX(-500px);
       -moz-transform: translateX(-500px);
       -ms-transform: translateX(-500px);
       -o-transform: translateX(-500px);
       transform: translateX(-500px); }
-    .page1 .main .txt.head {
-      width: 70%; }
-    .page1 .main .txt.sub {
-      width: 30%;
-      margin-bottom: 5%; }
-    .page1 .main .active {
-      -webkit-transition: all 1s;
-      -moz-transition: all 1s;
-      transition: all 1s;
-      -webkit-transform: translateX(0);
-      -moz-transform: translateX(0);
-      -ms-transform: translateX(0);
-      -o-transform: translateX(0);
-      transform: translateX(0); }
+  .page1 .active {
+    -webkit-transition: -webkit-transform 2s;
+    -moz-transition: -moz-transform 2s;
+    transition: transform 2s;
+    -webkit-transform: translateX(0) !important;
+    -moz-transform: translateX(0) !important;
+    -ms-transform: translateX(0) !important;
+    -o-transform: translateX(0) !important;
+    transform: translateX(0) !important; }
 
 .page2 {
   background: url("/images/2-bg1.jpg") center no-repeat;
@@ -522,4 +530,14 @@ img {
     .page4 .main .weibo {
       display: none; }
 
-/*# sourceMappingURL=entry.css.map*/
+.plane {
+  z-index: 1000;
+  position: absolute;
+  width: 50px;
+  left: 50%;
+  bottom: 15%;
+  -webkit-transform: translateX(-50%);
+  -moz-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
+  -o-transform: translateX(-50%);
+  transform: translateX(-50%); }

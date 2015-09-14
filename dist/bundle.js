@@ -1,76 +1,82 @@
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
-/******/
+
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
-/******/
+
 /******/ 		// Check if module is in cache
 /******/ 		if(installedModules[moduleId])
 /******/ 			return installedModules[moduleId].exports;
-/******/
+
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = installedModules[moduleId] = {
 /******/ 			exports: {},
 /******/ 			id: moduleId,
 /******/ 			loaded: false
 /******/ 		};
-/******/
+
 /******/ 		// Execute the module function
 /******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-/******/
+
 /******/ 		// Flag the module as loaded
 /******/ 		module.loaded = true;
-/******/
+
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
 /******/ 	}
-/******/
-/******/
+
+
 /******/ 	// expose the modules object (__webpack_modules__)
 /******/ 	__webpack_require__.m = modules;
-/******/
+
 /******/ 	// expose the module cache
 /******/ 	__webpack_require__.c = installedModules;
-/******/
+
 /******/ 	// __webpack_public_path__
 /******/ 	__webpack_require__.p = "";
-/******/
+
 /******/ 	// Load entry module and return exports
 /******/ 	return __webpack_require__(0);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
-/*!*******************!*\
-  !*** multi entry ***!
-  \*******************/
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(/*! ./script.js */1);
+	module.exports = __webpack_require__(1);
 
 
 /***/ },
 /* 1 */
-/*!*******************!*\
-  !*** ./script.js ***!
-  \*******************/
 /***/ function(module, exports, __webpack_require__) {
 
-	var css = __webpack_require__(/*! ./style.scss */ 2)
-	var $ = __webpack_require__(/*! zeptojs */ 7)
+	var css = __webpack_require__(2)
+	var $ = __webpack_require__(7)
 	  // var Reveal = require('reveal.js')
-	
-	setTimeout(function() {
-	  $('.txt1').addClass('active')
-	  $('.txt.sub').addClass('active')
-	},2000)
+
+	var timeDelay = 2000
+
+	$(document).ready(function() {
+	  //page1
+	  $('.page1').css('visibility', 'visible')
+	  $('.page1 .txt1').addClass('active')
+
+	  for (var i = 1; i < 5; i++) {
+	    setTimeout(function(num) {
+	      $('.page1 .txt' + (num + 1)).addClass('active')
+	    }, timeDelay * i, i)
+	  }
+
+	  $('.plane').on('click',function(){
+	    $('.page1').css('visibility', 'hidden')
+	    $('.page2').css('visibility', 'visible')
+	  })
+
+	})
 
 /***/ },
 /* 2 */
-/*!********************!*\
-  !*** ./style.scss ***!
-  \********************/
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
@@ -81,13 +87,10 @@
 /* 5 */,
 /* 6 */,
 /* 7 */
-/*!****************************!*\
-  !*** ./~/zeptojs/zepto.js ***!
-  \****************************/
 /***/ function(module, exports) {
 
 	/* Zepto v1.1.4 - zepto event ajax form ie - zeptojs.com/license */
-	
+
 	var Zepto = (function() {
 	  var undefined, key, $, classList, emptyArray = [], slice = emptyArray.slice, filter = emptyArray.filter,
 	    document = window.document,
@@ -98,10 +101,10 @@
 	    tagExpanderRE = /<(?!area|br|col|embed|hr|img|input|link|meta|param)(([\w:]+)[^>]*)\/>/ig,
 	    rootNodeRE = /^(?:body|html)$/i,
 	    capitalRE = /([A-Z])/g,
-	
+
 	    // special attributes that should be get/set via method calls
 	    methodAttributes = ['val', 'css', 'html', 'text', 'data', 'width', 'height', 'offset'],
-	
+
 	    adjacencyOperators = [ 'after', 'prepend', 'before', 'append' ],
 	    table = document.createElement('table'),
 	    tableRow = document.createElement('tr'),
@@ -134,7 +137,7 @@
 	    },
 	    isArray = Array.isArray ||
 	      function(object){ return object instanceof Array }
-	
+
 	  zepto.matches = function(element, selector) {
 	    if (!selector || !element || element.nodeType !== 1) return false
 	    var matchesSelector = element.webkitMatchesSelector || element.mozMatchesSelector ||
@@ -147,12 +150,12 @@
 	    temp && tempParent.removeChild(element)
 	    return match
 	  }
-	
+
 	  function type(obj) {
 	    return obj == null ? String(obj) :
 	      class2type[toString.call(obj)] || "object"
 	  }
-	
+
 	  function isFunction(value) { return type(value) == "function" }
 	  function isWindow(obj)     { return obj != null && obj == obj.window }
 	  function isDocument(obj)   { return obj != null && obj.nodeType == obj.DOCUMENT_NODE }
@@ -161,7 +164,7 @@
 	    return isObject(obj) && !isWindow(obj) && Object.getPrototypeOf(obj) == Object.prototype
 	  }
 	  function likeArray(obj) { return typeof obj.length == 'number' }
-	
+
 	  function compact(array) { return filter.call(array, function(item){ return item != null }) }
 	  function flatten(array) { return array.length > 0 ? $.fn.concat.apply([], array) : array }
 	  camelize = function(str){ return str.replace(/-+(.)?/g, function(match, chr){ return chr ? chr.toUpperCase() : '' }) }
@@ -173,16 +176,16 @@
 	           .toLowerCase()
 	  }
 	  uniq = function(array){ return filter.call(array, function(item, idx){ return array.indexOf(item) == idx }) }
-	
+
 	  function classRE(name) {
 	    return name in classCache ?
 	      classCache[name] : (classCache[name] = new RegExp('(^|\\s)' + name + '(\\s|$)'))
 	  }
-	
+
 	  function maybeAddPx(name, value) {
 	    return (typeof value == "number" && !cssNumber[dasherize(name)]) ? value + "px" : value
 	  }
-	
+
 	  function defaultDisplay(nodeName) {
 	    var element, display
 	    if (!elementDisplay[nodeName]) {
@@ -195,13 +198,13 @@
 	    }
 	    return elementDisplay[nodeName]
 	  }
-	
+
 	  function children(element) {
 	    return 'children' in element ?
 	      slice.call(element.children) :
 	      $.map(element.childNodes, function(node){ if (node.nodeType == 1) return node })
 	  }
-	
+
 	  // `$.zepto.fragment` takes a html string and an optional tag name
 	  // to generate DOM nodes nodes from the given html string.
 	  // The generated DOM nodes are returned as an array.
@@ -209,22 +212,22 @@
 	  // it compatible with browsers that don't support the DOM fully.
 	  zepto.fragment = function(html, name, properties) {
 	    var dom, nodes, container
-	
+
 	    // A special case optimization for a single tag
 	    if (singleTagRE.test(html)) dom = $(document.createElement(RegExp.$1))
-	
+
 	    if (!dom) {
 	      if (html.replace) html = html.replace(tagExpanderRE, "<$1></$2>")
 	      if (name === undefined) name = fragmentRE.test(html) && RegExp.$1
 	      if (!(name in containers)) name = '*'
-	
+
 	      container = containers[name]
 	      container.innerHTML = '' + html
 	      dom = $.each(slice.call(container.childNodes), function(){
 	        container.removeChild(this)
 	      })
 	    }
-	
+
 	    if (isPlainObject(properties)) {
 	      nodes = $(dom)
 	      $.each(properties, function(key, value) {
@@ -232,10 +235,10 @@
 	        else nodes.attr(key, value)
 	      })
 	    }
-	
+
 	    return dom
 	  }
-	
+
 	  // `$.zepto.Z` swaps out the prototype of the given `dom` array
 	  // of nodes with `$.fn` and thus supplying all the Zepto functions
 	  // to the array. Note that `__proto__` is not supported on Internet
@@ -246,13 +249,13 @@
 	    dom.selector = selector || ''
 	    return dom
 	  }
-	
+
 	  // `$.zepto.isZ` should return `true` if the given object is a Zepto
 	  // collection. This method can be overriden in plugins.
 	  zepto.isZ = function(object) {
 	    return object instanceof zepto.Z
 	  }
-	
+
 	  // `$.zepto.init` is Zepto's counterpart to jQuery's `$.fn.init` and
 	  // takes a CSS selector and an optional context (and handles various
 	  // special cases).
@@ -297,7 +300,7 @@
 	    // create a new Zepto collection from the nodes found
 	    return zepto.Z(dom, selector)
 	  }
-	
+
 	  // `$` will be the base `Zepto` object. When calling this
 	  // function just call `$.zepto.init, which makes the implementation
 	  // details of selecting nodes and creating Zepto collections
@@ -305,7 +308,7 @@
 	  $ = function(selector, context){
 	    return zepto.init(selector, context)
 	  }
-	
+
 	  function extend(target, source, deep) {
 	    for (key in source)
 	      if (deep && (isPlainObject(source[key]) || isArray(source[key]))) {
@@ -317,7 +320,7 @@
 	      }
 	      else if (source[key] !== undefined) target[key] = source[key]
 	  }
-	
+
 	  // Copy all but undefined properties from one or more
 	  // objects to the `target` object.
 	  $.extend = function(target){
@@ -329,7 +332,7 @@
 	    args.forEach(function(arg){ extend(target, arg, deep) })
 	    return target
 	  }
-	
+
 	  // `$.zepto.qsa` is Zepto's CSS selector implementation which
 	  // uses `document.querySelectorAll` and optimizes for some special cases, like `#id`.
 	  // This method can be overriden in plugins.
@@ -349,11 +352,11 @@
 	          element.querySelectorAll(selector) // Or it's not simple, and we need to query all
 	      )
 	  }
-	
+
 	  function filtered(nodes, selector) {
 	    return selector == null ? $(nodes) : $(nodes).filter(selector)
 	  }
-	
+
 	  $.contains = document.documentElement.contains ?
 	    function(parent, node) {
 	      return parent !== node && parent.contains(node)
@@ -363,24 +366,24 @@
 	        if (node === parent) return true
 	      return false
 	    }
-	
+
 	  function funcArg(context, arg, idx, payload) {
 	    return isFunction(arg) ? arg.call(context, idx, payload) : arg
 	  }
-	
+
 	  function setAttribute(node, name, value) {
 	    value == null ? node.removeAttribute(name) : node.setAttribute(name, value)
 	  }
-	
+
 	  // access className property while respecting SVGAnimatedString
 	  function className(node, value){
 	    var klass = node.className,
 	        svg   = klass && klass.baseVal !== undefined
-	
+
 	    if (value === undefined) return svg ? klass.baseVal : klass
 	    svg ? (klass.baseVal = value) : (node.className = value)
 	  }
-	
+
 	  // "true"  => true
 	  // "false" => false
 	  // "null"  => null
@@ -404,33 +407,33 @@
 	      return value
 	    }
 	  }
-	
+
 	  $.type = type
 	  $.isFunction = isFunction
 	  $.isWindow = isWindow
 	  $.isArray = isArray
 	  $.isPlainObject = isPlainObject
-	
+
 	  $.isEmptyObject = function(obj) {
 	    var name
 	    for (name in obj) return false
 	    return true
 	  }
-	
+
 	  $.inArray = function(elem, array, i){
 	    return emptyArray.indexOf.call(array, elem, i)
 	  }
-	
+
 	  $.camelCase = camelize
 	  $.trim = function(str) {
 	    return str == null ? "" : String.prototype.trim.call(str)
 	  }
-	
+
 	  // plugin compatibility
 	  $.uuid = 0
 	  $.support = { }
 	  $.expr = { }
-	
+
 	  $.map = function(elements, callback){
 	    var value, values = [], i, key
 	    if (likeArray(elements))
@@ -445,7 +448,7 @@
 	      }
 	    return flatten(values)
 	  }
-	
+
 	  $.each = function(elements, callback){
 	    var i, key
 	    if (likeArray(elements)) {
@@ -455,21 +458,21 @@
 	      for (key in elements)
 	        if (callback.call(elements[key], key, elements[key]) === false) return elements
 	    }
-	
+
 	    return elements
 	  }
-	
+
 	  $.grep = function(elements, callback){
 	    return filter.call(elements, callback)
 	  }
-	
+
 	  if (window.JSON) $.parseJSON = JSON.parse
-	
+
 	  // Populate the class2type map
 	  $.each("Boolean Number String Function Array Date RegExp Object Error".split(" "), function(i, name) {
 	    class2type[ "[object " + name + "]" ] = name.toLowerCase()
 	  })
-	
+
 	  // Define methods that will be available on all
 	  // Zepto collections
 	  $.fn = {
@@ -481,7 +484,7 @@
 	    sort: emptyArray.sort,
 	    indexOf: emptyArray.indexOf,
 	    concat: emptyArray.concat,
-	
+
 	    // `map` and `slice` in the jQuery API work differently
 	    // from their array counterparts
 	    map: function(fn){
@@ -490,7 +493,7 @@
 	    slice: function(){
 	      return $(slice.apply(this, arguments))
 	    },
-	
+
 	    ready: function(callback){
 	      // need to check if document.body exists for IE as that browser reports
 	      // document ready when it hasn't yet created the body element
@@ -630,7 +633,7 @@
 	      if (this[0] && !func)
 	        var dom   = $(structure).get(0),
 	            clone = dom.parentNode || this.length > 1
-	
+
 	      return this.each(function(index){
 	        $(this).wrapAll(
 	          func ? structure.call(this, index) :
@@ -717,11 +720,11 @@
 	    },
 	    data: function(name, value){
 	      var attrName = 'data-' + name.replace(capitalRE, '-$1').toLowerCase()
-	
+
 	      var data = (1 in arguments) ?
 	        this.attr(attrName, value) :
 	        this.attr(attrName)
-	
+
 	      return data !== null ? deserializeValue(data) : undefined
 	    },
 	    val: function(value){
@@ -743,7 +746,7 @@
 	              top:  coords.top  - parentOffset.top,
 	              left: coords.left - parentOffset.left
 	            }
-	
+
 	        if ($this.css('position') == 'static') props['position'] = 'relative'
 	        $this.css(props)
 	      })
@@ -770,7 +773,7 @@
 	          return props
 	        }
 	      }
-	
+
 	      var css = ''
 	      if (type(property) == 'string') {
 	        if (!value && value !== 0)
@@ -784,7 +787,7 @@
 	          else
 	            css += dasherize(key) + ':' + maybeAddPx(key, property[key]) + ';'
 	      }
-	
+
 	      return this.each(function(){ this.style.cssText += ';' + css })
 	    },
 	    index: function(element){
@@ -845,24 +848,24 @@
 	    },
 	    position: function() {
 	      if (!this.length) return
-	
+
 	      var elem = this[0],
 	        // Get *real* offsetParent
 	        offsetParent = this.offsetParent(),
 	        // Get correct offsets
 	        offset       = this.offset(),
 	        parentOffset = rootNodeRE.test(offsetParent[0].nodeName) ? { top: 0, left: 0 } : offsetParent.offset()
-	
+
 	      // Subtract element margins
 	      // note: when an element has margin: auto the offsetLeft and marginLeft
 	      // are the same in Safari causing offset.left to incorrectly be 0
 	      offset.top  -= parseFloat( $(elem).css('margin-top') ) || 0
 	      offset.left -= parseFloat( $(elem).css('margin-left') ) || 0
-	
+
 	      // Add offsetParent borders
 	      parentOffset.top  += parseFloat( $(offsetParent[0]).css('border-top-width') ) || 0
 	      parentOffset.left += parseFloat( $(offsetParent[0]).css('border-left-width') ) || 0
-	
+
 	      // Subtract the two offsets
 	      return {
 	        top:  offset.top  - parentOffset.top,
@@ -878,15 +881,15 @@
 	      })
 	    }
 	  }
-	
+
 	  // for now
 	  $.fn.detach = $.fn.remove
-	
+
 	  // Generate the `width` and `height` functions
 	  ;['width', 'height'].forEach(function(dimension){
 	    var dimensionProperty =
 	      dimension.replace(/./, function(m){ return m[0].toUpperCase() })
-	
+
 	    $.fn[dimension] = function(value){
 	      var offset, el = this[0]
 	      if (value === undefined) return isWindow(el) ? el['inner' + dimensionProperty] :
@@ -898,18 +901,18 @@
 	      })
 	    }
 	  })
-	
+
 	  function traverseNode(node, fun) {
 	    fun(node)
 	    for (var i = 0, len = node.childNodes.length; i < len; i++)
 	      traverseNode(node.childNodes[i], fun)
 	  }
-	
+
 	  // Generate the `after`, `prepend`, `before`, `append`,
 	  // `insertAfter`, `insertBefore`, `appendTo`, and `prependTo` methods.
 	  adjacencyOperators.forEach(function(operator, operatorIndex) {
 	    var inside = operatorIndex % 2 //=> prepend, append
-	
+
 	    $.fn[operator] = function(){
 	      // arguments can be nodes, arrays of nodes, Zepto objects and HTML strings
 	      var argType, nodes = $.map(arguments, function(arg) {
@@ -919,22 +922,22 @@
 	          }),
 	          parent, copyByClone = this.length > 1
 	      if (nodes.length < 1) return this
-	
+
 	      return this.each(function(_, target){
 	        parent = inside ? target : target.parentNode
-	
+
 	        // convert all methods to a "before" operation
 	        target = operatorIndex == 0 ? target.nextSibling :
 	                 operatorIndex == 1 ? target.firstChild :
 	                 operatorIndex == 2 ? target :
 	                 null
-	
+
 	        var parentInDocument = $.contains(document.documentElement, parent)
-	
+
 	        nodes.forEach(function(node){
 	          if (copyByClone) node = node.cloneNode(true)
 	          else if (!parent) return $(node).remove()
-	
+
 	          parent.insertBefore(node, target)
 	          if (parentInDocument) traverseNode(node, function(el){
 	            if (el.nodeName != null && el.nodeName.toUpperCase() === 'SCRIPT' &&
@@ -944,7 +947,7 @@
 	        })
 	      })
 	    }
-	
+
 	    // after    => insertAfter
 	    // prepend  => prependTo
 	    // before   => insertBefore
@@ -954,19 +957,19 @@
 	      return this
 	    }
 	  })
-	
+
 	  zepto.Z.prototype = $.fn
-	
+
 	  // Export internal API functions in the `$.zepto` namespace
 	  zepto.uniq = uniq
 	  zepto.deserializeValue = deserializeValue
 	  $.zepto = zepto
-	
+
 	  return $
 	})()
-	
+
 	module.exports = Zepto
-	
+
 	;(function($){
 	  var _zid = 1, undefined,
 	      slice = Array.prototype.slice,
@@ -977,9 +980,9 @@
 	      focusinSupported = 'onfocusin' in window,
 	      focus = { focus: 'focusin', blur: 'focusout' },
 	      hover = { mouseenter: 'mouseover', mouseleave: 'mouseout' }
-	
+
 	  specialEvents.click = specialEvents.mousedown = specialEvents.mouseup = specialEvents.mousemove = 'MouseEvents'
-	
+
 	  function zid(element) {
 	    return element._zid || (element._zid = _zid++)
 	  }
@@ -1001,17 +1004,17 @@
 	  function matcherFor(ns) {
 	    return new RegExp('(?:^| )' + ns.replace(' ', ' .* ?') + '(?: |$)')
 	  }
-	
+
 	  function eventCapture(handler, captureSetting) {
 	    return handler.del &&
 	      (!focusinSupported && (handler.e in focus)) ||
 	      !!captureSetting
 	  }
-	
+
 	  function realEvent(type) {
 	    return hover[type] || (focusinSupported && focus[type]) || type
 	  }
-	
+
 	  function add(element, events, fn, data, selector, delegator, capture){
 	    var id = zid(element), set = (handlers[id] || (handlers[id] = []))
 	    events.split(/\s/).forEach(function(event){
@@ -1051,9 +1054,9 @@
 	      })
 	    })
 	  }
-	
+
 	  $.event = { add: add, remove: remove }
-	
+
 	  $.proxy = function(fn, context) {
 	    var args = (2 in arguments) && slice.call(arguments, 2)
 	    if (isFunction(fn)) {
@@ -1071,7 +1074,7 @@
 	      throw new TypeError("expected function")
 	    }
 	  }
-	
+
 	  $.fn.bind = function(event, data, callback){
 	    return this.on(event, data, callback)
 	  }
@@ -1081,7 +1084,7 @@
 	  $.fn.one = function(event, selector, data, callback){
 	    return this.on(event, selector, data, callback, 1)
 	  }
-	
+
 	  var returnTrue = function(){return true},
 	      returnFalse = function(){return false},
 	      ignoreProperties = /^([A-Z]|returnValue$|layer[XY]$)/,
@@ -1090,11 +1093,11 @@
 	        stopImmediatePropagation: 'isImmediatePropagationStopped',
 	        stopPropagation: 'isPropagationStopped'
 	      }
-	
+
 	  function compatible(event, source) {
 	    if (source || !event.isDefaultPrevented) {
 	      source || (source = event)
-	
+
 	      $.each(eventMethods, function(name, predicate) {
 	        var sourceMethod = source[name]
 	        event[name] = function(){
@@ -1103,7 +1106,7 @@
 	        }
 	        event[predicate] = returnFalse
 	      })
-	
+
 	      if (source.defaultPrevented !== undefined ? source.defaultPrevented :
 	          'returnValue' in source ? source.returnValue === false :
 	          source.getPreventDefault && source.getPreventDefault())
@@ -1111,22 +1114,22 @@
 	    }
 	    return event
 	  }
-	
+
 	  function createProxy(event) {
 	    var key, proxy = { originalEvent: event }
 	    for (key in event)
 	      if (!ignoreProperties.test(key) && event[key] !== undefined) proxy[key] = event[key]
-	
+
 	    return compatible(proxy, event)
 	  }
-	
+
 	  $.fn.delegate = function(selector, event, callback){
 	    return this.on(event, selector, callback)
 	  }
 	  $.fn.undelegate = function(selector, event, callback){
 	    return this.off(event, selector, callback)
 	  }
-	
+
 	  $.fn.live = function(event, callback){
 	    $(document.body).delegate(this.selector, event, callback)
 	    return this
@@ -1135,7 +1138,7 @@
 	    $(document.body).undelegate(this.selector, event, callback)
 	    return this
 	  }
-	
+
 	  $.fn.on = function(event, selector, data, callback, one){
 	    var autoRemove, delegator, $this = this
 	    if (event && !isString(event)) {
@@ -1144,20 +1147,20 @@
 	      })
 	      return $this
 	    }
-	
+
 	    if (!isString(selector) && !isFunction(callback) && callback !== false)
 	      callback = data, data = selector, selector = undefined
 	    if (isFunction(data) || data === false)
 	      callback = data, data = undefined
-	
+
 	    if (callback === false) callback = returnFalse
-	
+
 	    return $this.each(function(_, element){
 	      if (one) autoRemove = function(e){
 	        remove(element, e.type, callback)
 	        return callback.apply(this, arguments)
 	      }
-	
+
 	      if (selector) delegator = function(e){
 	        var evt, match = $(e.target).closest(selector, element).get(0)
 	        if (match && match !== element) {
@@ -1165,7 +1168,7 @@
 	          return (autoRemove || callback).apply(match, [evt].concat(slice.call(arguments, 1)))
 	        }
 	      }
-	
+
 	      add(element, event, callback, data, selector, delegator || autoRemove)
 	    })
 	  }
@@ -1177,17 +1180,17 @@
 	      })
 	      return $this
 	    }
-	
+
 	    if (!isString(selector) && !isFunction(callback) && callback !== false)
 	      callback = selector, selector = undefined
-	
+
 	    if (callback === false) callback = returnFalse
-	
+
 	    return $this.each(function(){
 	      remove(this, event, callback, selector)
 	    })
 	  }
-	
+
 	  $.fn.trigger = function(event, args){
 	    event = (isString(event) || $.isPlainObject(event)) ? $.Event(event) : compatible(event)
 	    event._args = args
@@ -1197,7 +1200,7 @@
 	      else $(this).triggerHandler(event, args)
 	    })
 	  }
-	
+
 	  // triggers event handlers on current element just as if an event occurred,
 	  // doesn't trigger an actual event, doesn't bubble
 	  $.fn.triggerHandler = function(event, args){
@@ -1213,7 +1216,7 @@
 	    })
 	    return result
 	  }
-	
+
 	  // shortcut methods for `.bind(event, fn)` for each event type
 	  ;('focusin focusout load resize scroll unload click dblclick '+
 	  'mousedown mouseup mousemove mouseover mouseout mouseenter mouseleave '+
@@ -1224,7 +1227,7 @@
 	        this.trigger(event)
 	    }
 	  })
-	
+
 	  ;['focus', 'blur'].forEach(function(name) {
 	    $.fn[name] = function(callback) {
 	      if (callback) this.bind(name, callback)
@@ -1235,7 +1238,7 @@
 	      return this
 	    }
 	  })
-	
+
 	  $.Event = function(type, props) {
 	    if (!isString(type)) props = type, type = props.type
 	    var event = document.createEvent(specialEvents[type] || 'Events'), bubbles = true
@@ -1243,9 +1246,9 @@
 	    event.initEvent(type, bubbles, true)
 	    return compatible(event)
 	  }
-	
+
 	})(Zepto)
-	
+
 	;(function($){
 	  var jsonpID = 0,
 	      document = window.document,
@@ -1257,36 +1260,36 @@
 	      jsonType = 'application/json',
 	      htmlType = 'text/html',
 	      blankRE = /^\s*$/
-	
+
 	  // trigger a custom event and return false if it was cancelled
 	  function triggerAndReturn(context, eventName, data) {
 	    var event = $.Event(eventName)
 	    $(context).trigger(event, data)
 	    return !event.isDefaultPrevented()
 	  }
-	
+
 	  // trigger an Ajax "global" event
 	  function triggerGlobal(settings, context, eventName, data) {
 	    if (settings.global) return triggerAndReturn(context || document, eventName, data)
 	  }
-	
+
 	  // Number of active Ajax requests
 	  $.active = 0
-	
+
 	  function ajaxStart(settings) {
 	    if (settings.global && $.active++ === 0) triggerGlobal(settings, null, 'ajaxStart')
 	  }
 	  function ajaxStop(settings) {
 	    if (settings.global && !(--$.active)) triggerGlobal(settings, null, 'ajaxStop')
 	  }
-	
+
 	  // triggers an extra global event "ajaxBeforeSend" that's like "ajaxSend" but cancelable
 	  function ajaxBeforeSend(xhr, settings) {
 	    var context = settings.context
 	    if (settings.beforeSend.call(context, xhr, settings) === false ||
 	        triggerGlobal(settings, context, 'ajaxBeforeSend', [xhr, settings]) === false)
 	      return false
-	
+
 	    triggerGlobal(settings, context, 'ajaxSend', [xhr, settings])
 	  }
 	  function ajaxSuccess(data, xhr, settings, deferred) {
@@ -1311,13 +1314,13 @@
 	    triggerGlobal(settings, context, 'ajaxComplete', [xhr, settings])
 	    ajaxStop(settings)
 	  }
-	
+
 	  // Empty function, used as default callback
 	  function empty() {}
-	
+
 	  $.ajaxJSONP = function(options, deferred){
 	    if (!('type' in options)) return $.ajax(options)
-	
+
 	    var _callbackName = options.jsonpCallback,
 	      callbackName = ($.isFunction(_callbackName) ?
 	        _callbackName() : _callbackName) || ('jsonp' + (++jsonpID)),
@@ -1328,45 +1331,45 @@
 	        $(script).triggerHandler('error', errorType || 'abort')
 	      },
 	      xhr = { abort: abort }, abortTimeout
-	
+
 	    if (deferred) deferred.promise(xhr)
-	
+
 	    $(script).on('load error', function(e, errorType){
 	      clearTimeout(abortTimeout)
 	      $(script).off().remove()
-	
+
 	      if (e.type == 'error' || !responseData) {
 	        ajaxError(null, errorType || 'error', xhr, options, deferred)
 	      } else {
 	        ajaxSuccess(responseData[0], xhr, options, deferred)
 	      }
-	
+
 	      window[callbackName] = originalCallback
 	      if (responseData && $.isFunction(originalCallback))
 	        originalCallback(responseData[0])
-	
+
 	      originalCallback = responseData = undefined
 	    })
-	
+
 	    if (ajaxBeforeSend(xhr, options) === false) {
 	      abort('abort')
 	      return xhr
 	    }
-	
+
 	    window[callbackName] = function(){
 	      responseData = arguments
 	    }
-	
+
 	    script.src = options.url.replace(/\?(.+)=\?/, '?$1=' + callbackName)
 	    document.head.appendChild(script)
-	
+
 	    if (options.timeout > 0) abortTimeout = setTimeout(function(){
 	      abort('timeout')
 	    }, options.timeout)
-	
+
 	    return xhr
 	  }
-	
+
 	  $.ajaxSettings = {
 	    // Default type of request
 	    type: 'GET',
@@ -1404,7 +1407,7 @@
 	    // Whether the browser should be allowed to cache GET responses
 	    cache: true
 	  }
-	
+
 	  function mimeToDataType(mime) {
 	    if (mime) mime = mime.split(';', 2)[0]
 	    return mime && ( mime == htmlType ? 'html' :
@@ -1412,12 +1415,12 @@
 	      scriptTypeRE.test(mime) ? 'script' :
 	      xmlTypeRE.test(mime) && 'xml' ) || 'text'
 	  }
-	
+
 	  function appendQuery(url, query) {
 	    if (query == '') return url
 	    return (url + '&' + query).replace(/[&?]{1,2}/, '?')
 	  }
-	
+
 	  // serialize payload and append it to the URL for GET requests
 	  function serializeData(options) {
 	    if (options.processData && options.data && $.type(options.data) != "string")
@@ -1425,36 +1428,36 @@
 	    if (options.data && (!options.type || options.type.toUpperCase() == 'GET'))
 	      options.url = appendQuery(options.url, options.data), options.data = undefined
 	  }
-	
+
 	  $.ajax = function(options){
 	    var settings = $.extend({}, options || {}),
 	        deferred = $.Deferred && $.Deferred()
 	    for (key in $.ajaxSettings) if (settings[key] === undefined) settings[key] = $.ajaxSettings[key]
-	
+
 	    ajaxStart(settings)
-	
+
 	    if (!settings.crossDomain) settings.crossDomain = /^([\w-]+:)?\/\/([^\/]+)/.test(settings.url) &&
 	      RegExp.$2 != window.location.host
-	
+
 	    if (!settings.url) settings.url = window.location.toString()
 	    serializeData(settings)
-	
+
 	    var dataType = settings.dataType, hasPlaceholder = /\?.+=\?/.test(settings.url)
 	    if (hasPlaceholder) dataType = 'jsonp'
-	
+
 	    if (settings.cache === false || (
 	         (!options || options.cache !== true) &&
 	         ('script' == dataType || 'jsonp' == dataType)
 	        ))
 	      settings.url = appendQuery(settings.url, '_=' + Date.now())
-	
+
 	    if ('jsonp' == dataType) {
 	      if (!hasPlaceholder)
 	        settings.url = appendQuery(settings.url,
 	          settings.jsonp ? (settings.jsonp + '=?') : settings.jsonp === false ? '' : 'callback=?')
 	      return $.ajaxJSONP(settings, deferred)
 	    }
-	
+
 	    var mime = settings.accepts[dataType],
 	        headers = { },
 	        setHeader = function(name, value) { headers[name.toLowerCase()] = [name, value] },
@@ -1462,9 +1465,9 @@
 	        xhr = settings.xhr(),
 	        nativeSetHeader = xhr.setRequestHeader,
 	        abortTimeout
-	
+
 	    if (deferred) deferred.promise(xhr)
-	
+
 	    if (!settings.crossDomain) setHeader('X-Requested-With', 'XMLHttpRequest')
 	    setHeader('Accept', mime || '*/*')
 	    if (mime = settings.mimeType || mime) {
@@ -1473,10 +1476,10 @@
 	    }
 	    if (settings.contentType || (settings.contentType !== false && settings.data && settings.type.toUpperCase() != 'GET'))
 	      setHeader('Content-Type', settings.contentType || 'application/x-www-form-urlencoded')
-	
+
 	    if (settings.headers) for (name in settings.headers) setHeader(name, settings.headers[name])
 	    xhr.setRequestHeader = setHeader
-	
+
 	    xhr.onreadystatechange = function(){
 	      if (xhr.readyState == 4) {
 	        xhr.onreadystatechange = empty
@@ -1485,14 +1488,14 @@
 	        if ((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304 || (xhr.status == 0 && protocol == 'file:')) {
 	          dataType = dataType || mimeToDataType(settings.mimeType || xhr.getResponseHeader('content-type'))
 	          result = xhr.responseText
-	
+
 	          try {
 	            // http://perfectionkills.com/global-eval-what-are-the-options/
 	            if (dataType == 'script')    (1,eval)(result)
 	            else if (dataType == 'xml')  result = xhr.responseXML
 	            else if (dataType == 'json') result = blankRE.test(result) ? null : $.parseJSON(result)
 	          } catch (e) { error = e }
-	
+
 	          if (error) ajaxError(error, 'parsererror', xhr, settings, deferred)
 	          else ajaxSuccess(result, xhr, settings, deferred)
 	        } else {
@@ -1500,31 +1503,31 @@
 	        }
 	      }
 	    }
-	
+
 	    if (ajaxBeforeSend(xhr, settings) === false) {
 	      xhr.abort()
 	      ajaxError(null, 'abort', xhr, settings, deferred)
 	      return xhr
 	    }
-	
+
 	    if (settings.xhrFields) for (name in settings.xhrFields) xhr[name] = settings.xhrFields[name]
-	
+
 	    var async = 'async' in settings ? settings.async : true
 	    xhr.open(settings.type, settings.url, async, settings.username, settings.password)
-	
+
 	    for (name in headers) nativeSetHeader.apply(xhr, headers[name])
-	
+
 	    if (settings.timeout > 0) abortTimeout = setTimeout(function(){
 	        xhr.onreadystatechange = empty
 	        xhr.abort()
 	        ajaxError(null, 'timeout', xhr, settings, deferred)
 	      }, settings.timeout)
-	
+
 	    // avoid sending empty string (#319)
 	    xhr.send(settings.data ? settings.data : null)
 	    return xhr
 	  }
-	
+
 	  // handle optional data/success arguments
 	  function parseArguments(url, data, success, dataType) {
 	    if ($.isFunction(data)) dataType = success, success = data, data = undefined
@@ -1536,23 +1539,23 @@
 	    , dataType: dataType
 	    }
 	  }
-	
+
 	  $.get = function(/* url, data, success, dataType */){
 	    return $.ajax(parseArguments.apply(null, arguments))
 	  }
-	
+
 	  $.post = function(/* url, data, success, dataType */){
 	    var options = parseArguments.apply(null, arguments)
 	    options.type = 'POST'
 	    return $.ajax(options)
 	  }
-	
+
 	  $.getJSON = function(/* url, data, success */){
 	    var options = parseArguments.apply(null, arguments)
 	    options.dataType = 'json'
 	    return $.ajax(options)
 	  }
-	
+
 	  $.fn.load = function(url, data, success){
 	    if (!this.length) return this
 	    var self = this, parts = url.split(/\s/), selector,
@@ -1568,9 +1571,9 @@
 	    $.ajax(options)
 	    return this
 	  }
-	
+
 	  var escape = encodeURIComponent
-	
+
 	  function serialize(params, obj, traditional, scope){
 	    var type, array = $.isArray(obj), hash = $.isPlainObject(obj)
 	    $.each(obj, function(key, value) {
@@ -1585,7 +1588,7 @@
 	      else params.add(key, value)
 	    })
 	  }
-	
+
 	  $.param = function(obj, traditional){
 	    var params = []
 	    params.add = function(k, v){ this.push(escape(k) + '=' + escape(v)) }
@@ -1593,7 +1596,7 @@
 	    return params.join('&').replace(/%20/g, '+')
 	  }
 	})(Zepto)
-	
+
 	;(function($){
 	  $.fn.serializeArray = function() {
 	    var result = [], el
@@ -1610,7 +1613,7 @@
 	    })
 	    return result
 	  }
-	
+
 	  $.fn.serialize = function(){
 	    var result = []
 	    this.serializeArray().forEach(function(elm){
@@ -1618,7 +1621,7 @@
 	    })
 	    return result.join('&')
 	  }
-	
+
 	  $.fn.submit = function(callback) {
 	    if (callback) this.bind('submit', callback)
 	    else if (this.length) {
@@ -1628,9 +1631,9 @@
 	    }
 	    return this
 	  }
-	
+
 	})(Zepto)
-	
+
 	;(function($){
 	  // __proto__ doesn't exist on IE<11, so redefine
 	  // the Z function to use object extension instead
@@ -1649,7 +1652,7 @@
 	      }
 	    })
 	  }
-	
+
 	  // getComputedStyle shouldn't freak out when called
 	  // without a valid element as argument
 	  try {
@@ -1669,4 +1672,3 @@
 
 /***/ }
 /******/ ]);
-//# sourceMappingURL=bundle.js.map
