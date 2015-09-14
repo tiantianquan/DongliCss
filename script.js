@@ -1,54 +1,73 @@
 var css = require('./style.scss')
 var $ = require('zeptojs')
-  // var Reveal = require('reveal.js')
+var co = require('co')
+require("babel/register")
+
+var timeout = function(ms) {
+  return new Promise((resolve, reject) => {
+    setTimeout(resolve, ms)
+  })
+}
 
 var timeDelay = 2000
+var addClass = (el, className, delay) => {
+  return timeout(delay).then(() => {
+    $(el).addClass(className)
+  })
+}
+var removeClass = (el, className, delay) => {
+  return timeout(delay).then(() => {
+    $(el).removeClass(className)
+  })
+}
+
+var removeActive = () => {
+  $('.active').removeClass('active')
+}
+
+var pageBegin = (pageNum, cb) => {
+  $('.page' + pageNum).on('begin', () => {
+    co(function*() {
+      removeActive()
+      $('.page' + (pageNum - 1)).removeClass('is-show')
+      $('.page' + (pageNum)).addClass('is-show')
+      yield cb
+      yield timeout(timeDelay)
+      click().then(() => {
+        $('.page' + (pageNum + 1)).trigger('begin')
+      })
+    })
+  })
+}
 
 $(document).ready(function() {
-
-  var plane = $('.plane')
-    //page1
-  $('.page1').addClass('is-show')
-  $('.page1 .txt1').addClass('active')
-
-  for (var i = 1; i < 5; i++) {
-    setTimeout(function(num) {
-      $('.page1 .txt' + (num + 1)).addClass('active')
-    }, timeDelay * i, i)
-  }
-
-  //page2
-  $('.page2').on('begin', function() {
+  pageBegin(1, function*() {
+    for (var i = 1; i < 6; i++) {
+      yield addClass('.page1 .txt' + i, 'active', timeDelay)
+    }
+  })
+  pageBegin(2, function*() {
     for (var i = 1; i < 4; i++) {
-      setTimeout(function(num) {
-        $('.page2 .txt' + num).addClass('active')
-      }, timeDelay * i, i)
+      yield addClass('.page2 .txt' + i, 'active', timeDelay)
     }
   })
 
-  $('.page3').on('begin', function() {
-    setTimeout(function() {
-      $('.page3 .txt1').addClass('active')
-    }, timeDelay)
-    setTimeout(function() {
-      $('.page3').addClass('active')
-    }, timeDelay/2)
+  pageBegin(3, function*() {
+    yield addClass('.page3', 'active', timeDelay)
+    yield addClass('.page3 .txt1', 'active', timeDelay)
+  })
+
+  pageBegin(4, function*() {
+    yield addClass('.page3', 'active', timeDelay)
+    yield addClass('.page3 .txt1', 'active', timeDelay)
   })
 
 
-
-
-
-
-  plane.one('click', function() {
-    $('.page1').removeClass('is-show')
-    $('.page2').addClass('is-show')
-    $('.page2').trigger('begin')
-
-    plane.one('click', function() {
-      $('.page2').removeClass('is-show')
-      $('.page3').addClass('is-show')
-      $('.page3').trigger('begin')
-    })
-  })
+  $('.page1').trigger('begin')
 })
+
+var click = function() {
+  return new Promise(function(resolve) {
+    $('.plane').one('click', resolve)
+  })
+}
