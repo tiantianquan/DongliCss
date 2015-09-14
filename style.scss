@@ -8,6 +8,12 @@ $sideLong:500px;
   @include transform(translateY(-50%) translateX(-50%));
 }
 
+@mixin edit {
+  visibility: visible;
+  opacity: 1;
+  z-index: 1000;
+}
+
 html,
 body {
   height: 100%;
@@ -33,6 +39,7 @@ img {
   background-size: cover !important;
 }
 
+//page1
 .page1 {
   @include background(url("/images/1-bg2.png") center no-repeat,
   url("/images/1-bg1.jpg") center no-repeat);
@@ -60,6 +67,7 @@ img {
   }
 }
 
+//page2
 .page2 {
   @include background(url("/images/2-bg1.jpg") center no-repeat);
   img {
@@ -99,6 +107,7 @@ img {
   }
 }
 
+//page3
 .page3 {
   @include background(url("/images/3-bg2.jpg") 0 center no-repeat);
   .txt1 {
@@ -116,22 +125,113 @@ img {
   }
 }
 
-.page3.active{
+.page3.active {
   @include transition(background-position 2s);
   background-position: right center;
 }
 
+//page4
 .page4 {
   @include background(url("/images/4-bg1.png") 0 center no-repeat);
   .main {
     height: 100%;
     width: 100%;
     .phone {
+      visibility: hidden;
       width: 80%;
       margin: 0 auto;
     }
     .weibo {
       display: none;
+    }
+  }
+}
+
+.page4.active {
+  @include transition(background-position 2s);
+  background-position: right center;
+}
+
+//page5
+.page5 {
+  @include background(url("/images/5-bg1.png") 0 center no-repeat);
+}
+
+//page6
+.page6 {
+  @include background(url("/images/1-bg2.png") center no-repeat,
+  url("/images/1-bg1.jpg") center no-repeat);
+  .main {
+    @include center;
+    width: 100%;
+    .video {
+      width: 100%;
+      height: 200px;
+      background-color: #444;
+      margin-bottom: 10%;
+    }
+    .txt {
+      margin: 0 auto;
+    }
+    .txt.head {
+      width: 70%;
+      margin-bottom: 10%;
+      @include transform(translateX(-$sideLong));
+    }
+    .txt.sub {
+      width: 30%;
+      margin-bottom: 5%;
+      @include transform(translateX(-$sideLong));
+    }
+    .active {
+      @include transition(transform 2s);
+      @include transform(translateX(0) !important);
+    }
+  }
+}
+
+//page7
+.page7 {
+  @include background(url("/images/1-bg2.png") center no-repeat,
+  url("/images/1-bg1.jpg") center no-repeat);
+  // @include edit;
+  .main {
+    @include center;
+    width: 100%;
+    .video {
+      width: 100%;
+      height: 200px;
+      background-color: #444;
+      margin-bottom: 10%;
+    }
+    .txt {
+      margin: 0 auto;
+    }
+    .txt.head {
+      width: 70%;
+      margin-bottom: 10%;
+      @include transform(translateX(-$sideLong));
+    }
+    .txt.sub {
+      width: 30%;
+      margin-bottom: 5%;
+      @include transform(translateX(-$sideLong));
+    }
+    .qrcode {
+      margin: 0 auto;
+      width: 50%;
+      -webkit-mask-image: -webkit-linear-gradient(top, rgba(0, 0, 0, 1) 90%, rgba(0, 0, 0, 0));
+      -webkit-mask-size: 110%;
+      -webkit-mask-repeat: no-repeat;
+      -webkit-mask-position: 0 -300px;
+    }
+    .active {
+      @include transition(transform 2s);
+      @include transform(translateX(0) !important);
+    }
+    .qrcode.active {
+      -webkit-mask-position: 0 0;
+      @include transition(-webkit-mask-position 2s !important);
     }
   }
 }
@@ -155,4 +255,25 @@ img {
   left: 50%;
   bottom: 7%;
   @include transform(translateX(-50%));
+}
+
+@keyframes zoomInDown {
+  from {
+    opacity: 1;
+    transform: scale3d(1, 1, 1);
+    animation-timing-function: cubic-bezier(0.550, 0.055, 0.675, 0.190);
+  }
+  to {
+    opacity: 0;
+    transform: scale3d(10, 10, 10); 
+    animation-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1);
+  }
+}
+
+.zoomInDown {
+  animation-name: zoomInDown;
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
 }
