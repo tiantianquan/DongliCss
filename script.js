@@ -26,16 +26,29 @@ $(document).ready(function() {
     }
   })
 
+  $('.page3').on('begin', function() {
+    setTimeout(function() {
+      $('.page3 .txt1').addClass('active')
+    }, timeDelay)
+    setTimeout(function() {
+      $('.page3').addClass('active')
+    }, timeDelay/2)
+  })
 
 
-  plane.on('click', function() {
+
+
+
+
+  plane.one('click', function() {
     $('.page1').removeClass('is-show')
     $('.page2').addClass('is-show')
     $('.page2').trigger('begin')
 
-
-    plane.off('click')
-
-    plane.on('click', function() {})
+    plane.one('click', function() {
+      $('.page2').removeClass('is-show')
+      $('.page3').addClass('is-show')
+      $('.page3').trigger('begin')
+    })
   })
 })

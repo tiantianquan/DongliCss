@@ -489,19 +489,46 @@ img {
   background: url("/images/2-bg1.jpg") center no-repeat; }
   .page2 img {
     position: absolute; }
-  .page2 .txt1 {
+  .page2 .txt3 {
     top: 32%;
     left: 10%;
-    width: 40%; }
+    width: 40%;
+    -webkit-mask-image: -webkit-linear-gradient(right, black, black);
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-position: 200px 0; }
   .page2 .sub {
     width: 70%; }
+  .page2 .txt1 {
+    top: 7%;
+    -webkit-transform: translateX(500px);
+    -moz-transform: translateX(500px);
+    -ms-transform: translateX(500px);
+    -o-transform: translateX(500px);
+    transform: translateX(500px); }
   .page2 .txt2 {
-    top: 7%; }
-  .page2 .txt3 {
     top: 14%;
-    right: 2%; }
+    right: 2%;
+    -webkit-transform: translateX(500px);
+    -moz-transform: translateX(500px);
+    -ms-transform: translateX(500px);
+    -o-transform: translateX(500px);
+    transform: translateX(500px); }
   .page2 .front {
     display: none; }
+  .page2 .active {
+    -webkit-transition: -webkit-transform 2s;
+    -moz-transition: -moz-transform 2s;
+    transition: transform 2s;
+    -webkit-transform: translateX(0);
+    -moz-transform: translateX(0);
+    -ms-transform: translateX(0);
+    -o-transform: translateX(0);
+    transform: translateX(0); }
+  .page2 .txt3.active {
+    -webkit-mask-position: 0px 0;
+    -webkit-transition: -webkit-mask-position 1s !important;
+    -moz-transition: -webkit-mask-position 1s !important;
+    transition: -webkit-mask-position 1s !important; }
 
 .page3 {
   background: url("/images/3-bg2.jpg") 0 center no-repeat;
@@ -530,14 +557,19 @@ img {
     .page4 .main .weibo {
       display: none; }
 
+.is-show {
+  visibility: visible; }
+
 .plane {
   z-index: 1000;
   position: absolute;
   width: 50px;
   left: 50%;
-  bottom: 15%;
+  bottom: 7%;
   -webkit-transform: translateX(-50%);
   -moz-transform: translateX(-50%);
   -ms-transform: translateX(-50%);
   -o-transform: translateX(-50%);
   transform: translateX(-50%); }
+
+/*# sourceMappingURL=entry.css.map*/
