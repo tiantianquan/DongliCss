@@ -1,0 +1,108 @@
+@import "~normalize.css/normalize.css";
+@import "~node-bourbon/node_modules/bourbon/app/assets/stylesheets/_bourbon.scss";
+@mixin center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  @include transform(translateY(-50%) translateX(-50%));
+}
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+  background-color: #fff;
+}
+
+img {
+  display: block;
+  width: 100%;
+}
+
+.page {
+  margin: 0 auto;
+  display: block;
+  height: 100%;
+  width: 100%;
+  position: relative;
+  background-size: cover !important;
+}
+
+.page1 {
+  @include background(url("/images/1-bg2.png") center no-repeat,
+  url("/images/1-bg1.jpg") center no-repeat);
+  .main {
+    @include center;
+    width: 100%;
+    .txt {
+      margin: 0 auto;
+      margin-bottom: 10%;
+      @include transform(translateX(-500px));
+    }
+    .txt.head {
+      width: 70%;
+    }
+    .txt.sub {
+      width: 30%;
+      margin-bottom: 5%;
+    }
+  }
+}
+
+.page2 {
+  @include background(url("/images/2-bg1.jpg") center no-repeat);
+  img {
+    position: absolute;
+  }
+  .txt1 {
+    top: 32%;
+    left: 10%;
+    width: 40%;
+  }
+  .sub {
+    width: 70%;
+  }
+  .txt2 {
+    top: 7%;
+  }
+  .txt3 {
+    top: 14%;
+    right: 2%;
+  }
+  .front {
+    display: none;
+  }
+}
+
+.page3 {
+  @include background(url("/images/3-bg2.jpg") 0 center no-repeat);
+  .txt1 {
+    position: absolute;
+    width: 60%;
+    top: 10%;
+    left: 50%;
+    @include transform(translateX(-50%));
+    transition: left 1s;
+  }
+}
+
+.page4 {
+  @include background(url("/images/4-bg1.png") 0 center no-repeat);
+  .main {
+    height: 100%;
+    width: 100%;
+    .phone {
+      width: 80%;
+      margin: 0 auto;
+    }
+    .weibo {
+      display: none;
+    }
+  }
+}
+
+//--------------
+.active {
+  @include transition(all 1s);
+  @include transform(translateX(0));
+}

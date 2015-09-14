@@ -1,0 +1,31 @@
+{
+  "name": "donglicss",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack-dev-server -h --inline -d"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "css-loader": "^0.18.0",
+    "extract-text-webpack-plugin": "^0.8.2",
+    "file-loader": "^0.8.4",
+    "gulp-connect": "^2.2.0",
+    "gulp-livereload": "^3.8.0",
+    "node-sass": "^3.3.2",
+    "sass-loader": "^2.0.1",
+    "style-loader": "^0.12.3",
+    "url-loader": "^0.5.6",
+    "webpack": "^1.12.1",
+    "webpack-dev-server": "^1.10.1"
+  },
+  "dependencies": {
+    "node-bourbon": "^4.2.3",
+    "normalize.css": "^3.0.3",
+    "reveal.js": "^3.1.0",
+    "zeptojs": "^1.1.4"
+  }
+}
