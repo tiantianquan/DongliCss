@@ -4,6 +4,7 @@ var co = require('co')
 require("babel/register")
 
 
+//背景缓动类
 class BgTransform {
   constructor(str) {
     this.queryStr = str
@@ -31,21 +32,16 @@ BgTransform.bt3 = new BgTransform('.page3 .background')
 BgTransform.bt4 = new BgTransform('.page4 .background')
 BgTransform.bt5 = new BgTransform('.page5 .background')
 
-// var registerCss = (str) => {
-//   var deviceWidth = $(document).width()
-//   var imgWidth = $('.page3 .background').width()
-//   var tranformWidth = imgWidth - deviceWidth <= 0 ? 0 : imgWidth - deviceWidth
-//   $('.page3 .background').css('transform', 'translateX(-' + tranformWidth + 'px' + ')')
-//   console.log(deviceWidth, imgWidth)
-// }
-
 var timeout = (ms) => {
   return new Promise((resolve, reject) => {
     setTimeout(resolve, ms)
   })
 }
 
-var timeDelay = 0
+
+//延时时间
+var timeDelay = 300
+
 var addClass = (el, className, delay) => {
   return timeout(delay).then(() => {
     $(el).addClass(className)
@@ -57,36 +53,49 @@ var removeClass = (el, className, delay) => {
   })
 }
 
+
+//移除所有已完成效果
 var removeActive = () => {
   $('.active').removeClass('active')
 }
 
-var click = function() {
-  return new Promise(function(resolve) {
+var click = () => {
+  return new Promise((resolve) => {
     $('.plane').one('click', resolve)
   })
 }
 
+var convertToMs = (str) => parseFloat(str) * 1000
+
+//注册页面开始事件
 var pageBegin = (pageNum, cb) => {
   var lastPageNum = 7
   var beforePage = pageNum - 1
   var nextPage = pageNum + 1
   $('.page' + pageNum).on('begin', () => {
     co(function*() {
+      //进入页面
+      var plane = $('plane')
       removeActive()
       if (pageNum == 1) {
         beforePage = lastPageNum
       }
-      // yield timeout(1000).then(()=>{$('.page'+beforePage).addClass('zoomInDown')})
+      //plane
+      plane.removeClass('page' + beforePage + '-plane')
+      plane.addClass('page' + pageNum + '-plane')
+
+
       $('.page' + beforePage).removeClass('is-show')
       $('.page' + pageNum).addClass('is-show')
 
+      //页面执行
       yield cb
-      yield timeout(timeDelay)
+
+      //退出页面
       if (pageNum == lastPageNum) {
         nextPage = 1
       }
-      yield click().then(() => {
+      yield timeout(convertToMs(plane.css('transition-duration'))).then(() => {
         $('.page' + nextPage).trigger('begin')
       })
     })
@@ -94,15 +103,40 @@ var pageBegin = (pageNum, cb) => {
 }
 
 $(document).ready(function() {
+  var plane = $('.plane')
+
   pageBegin(1, function*() {
     for (var i = 1; i < 6; i++) {
       yield addClass('.page1 .txt' + i, 'active', timeDelay)
     }
+
+    //page1 plane
+    yield addClass(plane, 'show-entry show', timeDelay)
+    plane.removeClass('hide')
+    yield [removeClass(plane, 'show-entry', timeDelay), addClass(plane, 'flash', timeDelay)]
+    yield click().then(() => {
+      plane.addClass('page-fly')
+    })
+    yield timeout(convertToMs(plane.css('transition-duration')))
+    $('.page2').trigger('begin')
   })
   pageBegin(2, function*() {
+
+
+    //页面
     for (var i = 1; i < 4; i++) {
       yield addClass('.page2 .txt' + i, 'active', timeDelay)
     }
+
+    //page2 plane
+    yield addClass(plane, 'show-entry show', timeDelay)
+    plane.removeClass('hide')
+    yield [removeClass(plane, 'show-entry', timeDelay), addClass(plane, 'flash', timeDelay)]
+    yield click().then(() => {
+      plane.addClass('page-fly')
+    })
+    yield timeout(convertToMs(plane.css('transition-duration')))
+    $('.page2').trigger('begin')
   })
 
   pageBegin(3, function*() {
@@ -119,9 +153,8 @@ $(document).ready(function() {
 
   pageBegin(5, function*() {
     BgTransform.bt4.removeCss()
-    yield addClass('.page5 .background', 'active', timeDelay)
+    yield [addClass('.page5 .background', 'active', timeDelay), addClass('.page5 .front', 'active', timeDelay)]
     BgTransform.bt5.init().addCss()
-    yield addClass('.page5 .txt', 'active', timeDelay)
   })
 
   pageBegin(6, function*() {
