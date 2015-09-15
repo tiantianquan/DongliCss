@@ -40,7 +40,7 @@ var timeout = (ms) => {
 
 
 //延时时间
-var timeDelay = 300
+var timeDelay = 1000
 
 var addClass = (el, className, delay) => {
   return timeout(delay).then(() => {
@@ -59,9 +59,9 @@ var removeActive = () => {
   $('.active').removeClass('active')
 }
 
-var click = () => {
+var click = (str) => {
   return new Promise((resolve) => {
-    $('.plane').one('click', resolve)
+    $(str).one('click', resolve)
   })
 }
 
@@ -75,27 +75,30 @@ var pageBegin = (pageNum, cb) => {
   $('.page' + pageNum).on('begin', () => {
     co(function*() {
       //进入页面
-      var plane = $('plane')
       removeActive()
       if (pageNum == 1) {
         beforePage = lastPageNum
       }
-      //plane
-      plane.removeClass('page' + beforePage + '-plane')
-      plane.addClass('page' + pageNum + '-plane')
-
 
       $('.page' + beforePage).removeClass('is-show')
       $('.page' + pageNum).addClass('is-show')
 
+      var plane = $('.page' + pageNum + ' .plane')
+
       //页面执行
-      yield cb
+      yield cb(plane)
 
       //退出页面
       if (pageNum == lastPageNum) {
         nextPage = 1
       }
+      yield timeout(convertToMs(plane.css('transition-duration')))
+      yield click(plane).then(() => {
+        plane.addClass('fly-out')
+      })
       yield timeout(convertToMs(plane.css('transition-duration'))).then(() => {
+        plane.removeClass()
+        plane.addClass('plane')
         $('.page' + nextPage).trigger('begin')
       })
     })
@@ -103,9 +106,8 @@ var pageBegin = (pageNum, cb) => {
 }
 
 $(document).ready(function() {
-  var plane = $('.plane')
-
-  pageBegin(1, function*() {
+  pageBegin(1, function*(plane) {
+    plane.addClass('hide')
     for (var i = 1; i < 6; i++) {
       yield addClass('.page1 .txt' + i, 'active', timeDelay)
     }
@@ -114,58 +116,93 @@ $(document).ready(function() {
     yield addClass(plane, 'show-entry show', timeDelay)
     plane.removeClass('hide')
     yield [removeClass(plane, 'show-entry', timeDelay), addClass(plane, 'flash', timeDelay)]
-    yield click().then(() => {
-      plane.addClass('page-fly')
-    })
-    yield timeout(convertToMs(plane.css('transition-duration')))
-    $('.page2').trigger('begin')
+
   })
-  pageBegin(2, function*() {
 
 
-    //页面
+
+  pageBegin(2, function*(plane) {
+    $('.page2 .front').one('click', function() {
+        $('.page2 .front').removeClass('active')
+        plane.trigger('click')
+      })
+      //页面
     for (var i = 1; i < 4; i++) {
       yield addClass('.page2 .txt' + i, 'active', timeDelay)
     }
 
     //page2 plane
-    yield addClass(plane, 'show-entry show', timeDelay)
-    plane.removeClass('hide')
-    yield [removeClass(plane, 'show-entry', timeDelay), addClass(plane, 'flash', timeDelay)]
-    yield click().then(() => {
-      plane.addClass('page-fly')
-    })
-    yield timeout(convertToMs(plane.css('transition-duration')))
-    $('.page2').trigger('begin')
+    yield addClass(plane, 'fly1', timeDelay)
+    yield addClass(plane, 'fly2', timeDelay + convertToMs(plane.css('transition-duration')))
+    yield addClass('.page2 .front', 'active', timeDelay + convertToMs(plane.css('transition-duration')))
+
   })
 
-  pageBegin(3, function*() {
+  pageBegin(3, function*(plane) {
     yield addClass('.page3 .background', 'active', timeDelay)
     BgTransform.bt3.init().addCss()
+    yield addClass(plane, 'fly1', timeDelay)
     yield addClass('.page3 .txt1', 'active', timeDelay)
   })
 
-  pageBegin(4, function*() {
+
+
+  pageBegin(4, function*(plane) {
     BgTransform.bt3.removeCss()
-    yield addClass('.page4 .background', 'active', timeDelay)
+    yield addClass(plane, 'fly1', timeDelay)
+    yield addClass('.weibo', 'active', timeDelay + convertToMs(plane.css('transition-duration')))
+    yield click('.weibo').then(() => {
+      $('.weibo').removeClass('active')
+    })
+
+    yield [addClass('.page4 .background', 'active', timeDelay), addClass(plane, 'fly2', timeDelay)]
     BgTransform.bt4.init().addCss()
+    yield addClass('.phone', 'active', timeDelay + convertToMs(plane.css('transition-duration')))
+
+    yield click('.phone').then(() => {
+      $('.phone').removeClass('active')
+      $(plane).trigger('click')
+    })
   })
 
-  pageBegin(5, function*() {
+
+
+  pageBegin(5, function*(plane) {
     BgTransform.bt4.removeCss()
-    yield [addClass('.page5 .background', 'active', timeDelay), addClass('.page5 .front', 'active', timeDelay)]
+
+    yield addClass(plane, 'fly1', timeDelay)
+    yield [addClass('.page5 .background', 'active', timeDelay),
+      addClass('.page5 .front', 'active', timeDelay),
+      addClass(plane, 'fly2', timeDelay + convertToMs(plane.css('transition-duration')))
+    ]
     BgTransform.bt5.init().addCss()
   })
 
-  pageBegin(6, function*() {
+
+
+  pageBegin(6, function*(plane) {
     BgTransform.bt5.removeCss()
+    plane.addClass('hide')
+
     yield addClass('.page6 .head', 'active', timeDelay)
     yield addClass('.page6 .sub', 'active', timeDelay)
+
+    yield addClass(plane, 'show-entry show', timeDelay)
+    plane.removeClass('hide')
+    yield [removeClass(plane, 'show-entry', timeDelay), addClass(plane, 'flash', timeDelay)]
   })
-  pageBegin(7, function*() {
+
+
+
+  pageBegin(7, function*(plane) {
+    plane.addClass('hide')
     yield addClass('.page7 .head', 'active', timeDelay)
     yield addClass('.page7 .sub', 'active', timeDelay)
     yield addClass('.page7 .qrcode', 'active', timeDelay)
+
+    yield addClass(plane, 'show-entry show', timeDelay)
+    plane.removeClass('hide')
+    yield [removeClass(plane, 'show-entry', timeDelay), addClass(plane, 'flash', timeDelay)]
   })
 
 

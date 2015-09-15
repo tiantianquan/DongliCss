@@ -108,7 +108,15 @@ img {
     @include transform(translateX($sideLong));
   }
   .front {
-    display: none;
+    visibility: hidden;
+    opacity: 0;
+    z-index: 1000;
+    @include transition(all 2s);
+  }
+  .front.active {
+    @include transition(all 2s);
+    visibility: visible;
+    opacity: 1;
   }
   //缓动
   .active {
@@ -140,17 +148,38 @@ img {
 
 //page4
 .page4 {
-  .main {
-    height: 100%;
-    width: 100%;
-    .phone {
-      visibility: hidden;
-      width: 80%;
-      margin: 0 auto;
-    }
-    .weibo {
-      display: none;
-    }
+  // @include edit;
+  .phone {
+    @include transform(translateX(-50%));
+    left: 50%;
+    width: 80%;
+    top: 0;
+    position: absolute;
+    visibility: hidden;
+    opacity: 0;
+    z-index: 1000;
+    @include transition(all 2s);
+  }
+  .weibo {
+    @include transform(translateX(-50%));
+    left: 50%;
+    width: 80%;
+    top: 0;
+    position: absolute;
+    visibility: hidden;
+    opacity: 0;
+    z-index: 1000;
+    @include transition(all 2s);
+  }
+  .weibo.active {
+    @include transition(all 2s);
+    visibility: visible;
+    opacity: 1;
+  }
+  .phone.active {
+    @include transition(all 2s);
+    visibility: visible;
+    opacity: 1;
   }
 }
 
@@ -268,24 +297,14 @@ img {
 
 //--------------
 .plane {
-  z-index: 1000;
+  z-index: 100;
   position: absolute;
   width: 50px;
-}
-
-.page1-plane {
-  left: 50%;
-  bottom: 7%;
-  @include transform(translateX(-50%));
 }
 
 .plane.show {
   visibility: visible;
   opacity: 1;
-}
-
-.plane.show-entry {
-  @include transition(all 1s);
 }
 
 .plane.hide {
@@ -297,9 +316,117 @@ img {
   @include animation(flash 1.0s ease-in alternate-reverse infinite);
 }
 
-.plane.page-fly {
+.plane.show-entry {
   @include transition(all 1s);
-  @include transform(translateX(200px) translateY(-200px))
+}
+
+.page1 {
+  .plane {
+    left: 50%;
+    bottom: 7%;
+    @include transform(translateX(-50%));
+  }
+  .plane.fly-out {
+    @include transition(all 1s);
+    @include transform(translateX(200px) translateY(-200px))
+  }
+}
+
+.page2 {
+  .plane {
+    left: 0;
+    top: 80%;
+    @include transform(translateY(-50%));
+  }
+  .plane.fly1 {
+    @include transition(all 1s);
+    top: 70%;
+    left: 50%;
+  }
+  .plane.fly2 {
+    @include transition(all 1s);
+    top: 40%;
+    left: 70%;
+  }
+  .plane.fly-out {
+    @include transition(all 1s);
+    @include transform(translateX(200px) translateY(-200px))
+  }
+}
+
+.page3 {
+  .plane {
+    left: 0;
+    top: 20%;
+    @include transform(translateY(-50%));
+  }
+  .plane.fly1 {
+    @include transition(all 1s);
+    top: 70%;
+    left: 10%;
+  }
+  .plane.fly-out {
+    @include transition(all 1s);
+    @include transform(translateX(400px) translateY(-200px))
+  }
+}
+
+.page4 {
+  // @include edit;
+  .plane {
+    left: 0;
+    top: 50%;
+    @include transform(translateY(-50%));
+  }
+  .plane.fly1 {
+    @include transition(all 1s);
+    top: 70%;
+    left: 10%;
+  }
+  .plane.fly2 {
+    @include transition(all 2s);
+    top: 75%;
+    left: 50%;
+  }
+  .plane.fly-out {
+    @include transition(all 1s);
+    @include transform(translateX(400px) translateY(-200px))
+  }
+}
+
+.page5 {
+  // @include edit;
+  .plane {
+    left: 0;
+    top: 50%;
+    @include transform(translateY(-50%));
+  }
+  .plane.fly1 {
+    @include transition(all 1s);
+    top: 70%;
+    left: 50%;
+  }
+  .plane.fly2 {
+    @include transition(all 2s);
+    top: 30%;
+    left: 20%;
+  }
+  .plane.fly-out {
+    @include transition(all 1s);
+    @include transform(translateX(400px) translateY(-200px))
+  }
+}
+
+.page6,.page7 {
+  .plane {
+    left: 50%;
+    bottom: 7%;
+    @include transform(translateX(-50%));
+  }
+  .plane.fly-out {
+    @include transition(all 1s);
+    @include transform(translateX(200px) translateY(-200px))
+  }
 }
 
 @include keyframes(flash) {
