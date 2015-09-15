@@ -14,10 +14,12 @@ $sideLong:500px;
   z-index: 1000;
 }
 
+//解决移动端overflow不起作用问题
 html,
 body {
   height: 100%;
   width: 100%;
+  position: relative;
   overflow: hidden;
 }
 
@@ -37,6 +39,20 @@ img {
   height: 100%;
   width: 100%;
   background-size: cover !important;
+
+
+  .background-wrapper {
+    width: 100%;
+    height: 100%;
+    .background {
+      width: auto;
+      height: 100%;
+      @include transform(translateX(0));
+    }
+  }
+  .background.active {
+    @include transition(transform 2s);
+  }
 }
 
 //page1
@@ -109,7 +125,7 @@ img {
 
 //page3
 .page3 {
-  @include background(url("/images/3-bg2.jpg") 0 center no-repeat);
+  // @include edit;
   .txt1 {
     position: absolute;
     width: 60%;
@@ -125,14 +141,10 @@ img {
   }
 }
 
-.page3.active {
-  @include transition(background-position 2s);
-  background-position: right center;
-}
-
 //page4
 .page4 {
-  @include background(url("/images/4-bg1.png") 0 center no-repeat);
+  // @include background(url("/images/4-bg1.png") 0 center no-repeat);
+  // @include edit;
   .main {
     height: 100%;
     width: 100%;
@@ -147,14 +159,9 @@ img {
   }
 }
 
-.page4.active {
-  @include transition(background-position 2s);
-  background-position: right center;
-}
-
 //page5
 .page5 {
-  @include background(url("/images/5-bg1.png") 0 center no-repeat);
+  // @include background(url("/images/5-bg1.png") 0 center no-repeat);
 }
 
 //page6
@@ -265,7 +272,7 @@ img {
   }
   to {
     opacity: 0;
-    transform: scale3d(10, 10, 10); 
+    transform: scale3d(10, 10, 10);
     animation-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1);
   }
 }

@@ -3,7 +3,43 @@ var $ = require('zeptojs')
 var co = require('co')
 require("babel/register")
 
-var timeout = function(ms) {
+
+class BgTransform {
+  constructor(str) {
+    this.queryStr = str
+
+  }
+  init() {
+    this.el = $(this.queryStr)
+    this.deviceWidth = $(document).width()
+    this.imgWidth = this.el.width()
+    this.tranformWidth = this.imgWidth - this.deviceWidth <= 0 ? 0 : this.imgWidth - this.deviceWidth
+    return this
+  }
+
+  addCss() {
+    this.el.css('-webkit-transform', 'translateX(-' + this.tranformWidth + 'px' + ')')
+    console.log(this.tranformWidth, 1)
+  }
+  removeCss() {
+    this.el.css('-webkit-transform', 'translateX(0)')
+    console.log(this.tranformWidth, 2)
+  }
+}
+
+BgTransform.bt3 = new BgTransform('.page3 .background')
+BgTransform.bt4 = new BgTransform('.page4 .background')
+BgTransform.bt5 = new BgTransform('.page5 .background')
+
+// var registerCss = (str) => {
+//   var deviceWidth = $(document).width()
+//   var imgWidth = $('.page3 .background').width()
+//   var tranformWidth = imgWidth - deviceWidth <= 0 ? 0 : imgWidth - deviceWidth
+//   $('.page3 .background').css('transform', 'translateX(-' + tranformWidth + 'px' + ')')
+//   console.log(deviceWidth, imgWidth)
+// }
+
+var timeout = (ms) => {
   return new Promise((resolve, reject) => {
     setTimeout(resolve, ms)
   })
@@ -44,6 +80,7 @@ var pageBegin = (pageNum, cb) => {
       // yield timeout(1000).then(()=>{$('.page'+beforePage).addClass('zoomInDown')})
       $('.page' + beforePage).removeClass('is-show')
       $('.page' + pageNum).addClass('is-show')
+
       yield cb
       yield timeout(timeDelay)
       if (pageNum == lastPageNum) {
@@ -69,19 +106,26 @@ $(document).ready(function() {
   })
 
   pageBegin(3, function*() {
-    yield addClass('.page3', 'active', timeDelay)
+    yield addClass('.page3 .background', 'active', timeDelay)
+    BgTransform.bt3.init().addCss()
     yield addClass('.page3 .txt1', 'active', timeDelay)
   })
 
   pageBegin(4, function*() {
-    yield addClass('.page4', 'active', timeDelay)
+    BgTransform.bt3.removeCss()
+    yield addClass('.page4 .background', 'active', timeDelay)
+    BgTransform.bt4.init().addCss()
   })
 
   pageBegin(5, function*() {
+    BgTransform.bt4.removeCss()
+    yield addClass('.page5 .background', 'active', timeDelay)
+    BgTransform.bt5.init().addCss()
     yield addClass('.page5 .txt', 'active', timeDelay)
   })
 
   pageBegin(6, function*() {
+    BgTransform.bt5.removeCss()
     yield addClass('.page6 .head', 'active', timeDelay)
     yield addClass('.page6 .sub', 'active', timeDelay)
   })
@@ -93,4 +137,6 @@ $(document).ready(function() {
 
 
   $('.page1').trigger('begin')
+
+
 })
