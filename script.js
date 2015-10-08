@@ -40,7 +40,7 @@ var timeout = (ms) => {
 
 
 //延时时间
-var timeDelay = 1000
+var timeDelay = 2000
 
 var addClass = (el, className, delay) => {
   return timeout(delay).then(() => {
