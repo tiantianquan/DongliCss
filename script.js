@@ -116,6 +116,22 @@ $(document).ready(function() {
   var planeBot = $('.plane-bottom')
   var planeTxt = $('.plane-txt')
 
+  //音频控制
+  var bgAudio = $('.bg-audio')[0]
+  var audioWrapper = $('.audio-wrapper')
+
+  audioWrapper.click(()=>{
+    if(bgAudio.paused){
+      audioWrapper.addClass('rotate')
+      bgAudio.play()
+    }else{
+      audioWrapper.removeClass('rotate')
+      bgAudio.pause()
+    }
+  })
+
+
+
   pageBegin(1, function*(plane) {
     planeTxt.text('点击进入')
     for (var i = 1; i < 6; i++) {

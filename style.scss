@@ -23,6 +23,31 @@ body {
   overflow: hidden;
 }
 
+.audio-wrapper {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  z-index: 10000;
+  width: 30px;
+  height: 30px;
+  background-repeat: no-repeat;
+  background-image: url(./images/normalmusic.svg);
+  background-size: contain;
+}
+
+.rotate {
+  @include animation(rotating 1.2s linear infinite);
+}
+
+@include keyframes(rotating) {
+  from {
+    transform: rotate(0deg)
+  }
+  to {
+    transform: rotate(360deg)
+  }
+}
+
 img {
   display: block;
   width: 100%;
@@ -235,8 +260,8 @@ img {
       height: 200px;
       background-color: #444;
       margin-bottom: 10%;
-      iframe{
-        width:100%;
+      iframe {
+        width: 100%;
         height: 100%;
       }
     }
@@ -317,18 +342,21 @@ img {
 }
 
 //--------------
-.plane,.plane-bottom {
+.plane,
+.plane-bottom {
   z-index: 100;
   position: absolute;
   width: 50px;
 }
 
-.plane.show,.plane-bottom.show {
+.plane.show,
+.plane-bottom.show {
   visibility: visible;
   opacity: 1;
 }
 
-.plane.hide,.plane-bottom.hide {
+.plane.hide,
+.plane-bottom.hide {
   visibility: hidden;
   opacity: 0;
 }
@@ -337,7 +365,8 @@ img {
   @include animation(flash 1.0s ease-in alternate-reverse infinite);
 }
 
-.plane.show-entry,.plane-bottom.show-entry {
+.plane.show-entry,
+.plane-bottom.show-entry {
   @include transition(all 1s);
 }
 
