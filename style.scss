@@ -55,8 +55,7 @@ img {
 
 //page1
 .page1 {
-  @include background(url("/images/1-bg2.png") center no-repeat,
-  url("/images/1-bg1.jpg") center no-repeat);
+  @include background(url("/images/1-bg1.jpg") center no-repeat);
   .main {
     @include center;
     width: 100%;
@@ -83,47 +82,56 @@ img {
 
 //page2
 .page2 {
+  // @include edit;
   @include background(url("/images/2-bg1.jpg") center no-repeat);
   img {
     position: absolute;
   }
   .txt3 {
-    top: 32%;
-    left: 10%;
-    width: 40%;
+    top: 20%;
+    left: 5%;
+    width: 30%;
+  }
+  .mask {
     -webkit-mask-image: -webkit-linear-gradient(right, rgba(0, 0, 0, 1), rgba(0, 0, 0, 1));
     -webkit-mask-repeat: no-repeat;
-    -webkit-mask-position: 200px 0;
+    -webkit-mask-position: 250px 0;
   }
-  .sub {
-    width: 70%;
+  .paper {
+    width: 30%;
+    right: 10%;
+    top: 40%;
   }
-  .txt1 {
-    top: 7%;
-    @include transform(translateX($sideLong));
+  .map {
+    right: 0;
+    top: 15%;
+    width: 60%;
   }
-  .txt2 {
-    top: 14%;
-    right: 2%;
-    @include transform(translateX($sideLong));
+  .rect {
+    width: 50%;
+    top: 45%;
+    left: 5%;
   }
-  .front {
+  .people {
+    width: 50%;
+    bottom: 0;
+    left: 5%;
+  }
+  .trans {
     visibility: hidden;
     opacity: 0;
-    z-index: 1000;
     @include transition(all 2s);
   }
-  .front.active {
+  .front {
+    z-index: 1000;
+  }
+  //缓动
+  .trans.active {
     @include transition(all 2s);
     visibility: visible;
     opacity: 1;
   }
-  //缓动
-  .active {
-    @include transition(transform 2s);
-    @include transform(translateX(0));
-  }
-  .txt3.active {
+  .mask.active {
     -webkit-mask-position: 0px 0;
     @include transition(-webkit-mask-position 1s !important);
   }
@@ -131,18 +139,28 @@ img {
 
 //page3
 .page3 {
-  .txt1 {
-    position: absolute;
-    width: 60%;
-    top: 10%;
-    left: 50%;
-    // @include transform(translateX(-50%));
-    @include transform(translateX($sideLong));
-    transition: left 1s;
+  // @include edit;
+  @include background(url("/images/3-bg1.jpg") center no-repeat);
+  .kid {
+    top: 60%;
+    right: 10%;
+    width: 30%;
   }
-  .txt1.active {
-    @include transition(transform 2s);
-    @include transform(translateX(-50%));
+  .mom {
+    top: 60%;
+    width: 50%;
+    left: 0;
+  }
+  .trans {
+    position: absolute;
+    visibility: hidden;
+    opacity: 0;
+    // @include transition(all 2s);
+  }
+  .active {
+    @include transition(all 2s);
+    visibility: visible;
+    opacity: 1;
   }
 }
 
@@ -207,8 +225,7 @@ img {
 
 //page6
 .page6 {
-  @include background(url("/images/1-bg2.png") center no-repeat,
-  url("/images/1-bg1.jpg") center no-repeat);
+  @include background(url("/images/1-bg1.jpg") center no-repeat);
   .main {
     @include center;
     width: 100%;
@@ -240,8 +257,7 @@ img {
 
 //page7
 .page7 {
-  @include background(url("/images/1-bg2.png") center no-repeat,
-  url("/images/1-bg1.jpg") center no-repeat);
+  @include background(url("/images/1-bg1.jpg") center no-repeat);
   // @include edit;
   .main {
     @include center;
@@ -325,49 +341,49 @@ img {
     left: 50%;
     bottom: 7%;
     @include transform(translateX(-50%));
+    font-size: 12px;
+    .plane-txt {
+      line-height: 20px;
+    }
   }
   .plane.fly-out {
     @include transition(all 1s);
-    @include transform(translateX(200px) translateY(-200px))
+    @include transform(translateX(200px) translateY(-200px));
+    .plane-txt {
+      visibility: hidden;
+    }
   }
 }
 
 .page2 {
   .plane {
-    left: 0;
+    left: -100px;
     top: 80%;
-    @include transform(translateY(-50%));
+    @include transform(translateX(0) translateY(0));
   }
   .plane.fly1 {
     @include transition(all 1s);
-    top: 70%;
-    left: 50%;
-  }
-  .plane.fly2 {
-    @include transition(all 1s);
-    top: 40%;
-    left: 70%;
+    @include transform(translateX(200px) translateY(-150px));
   }
   .plane.fly-out {
     @include transition(all 1s);
-    @include transform(translateX(200px) translateY(-200px))
+    @include transform(translateX(600px) translateY(-200px))
   }
 }
 
 .page3 {
   .plane {
-    left: 0;
-    top: 20%;
-    @include transform(translateY(-50%));
+    left: -100px;
+    top: 80%;
+    @include transform(translateX(0) translateY(0));
   }
   .plane.fly1 {
     @include transition(all 1s);
-    top: 70%;
-    left: 10%;
+    @include transform(translateX(300px) translateY(-150px));
   }
   .plane.fly-out {
     @include transition(all 1s);
-    @include transform(translateX(400px) translateY(-200px))
+    @include transform(translateX(600px) translateY(-200px))
   }
 }
 
@@ -417,7 +433,8 @@ img {
   }
 }
 
-.page6,.page7 {
+.page6,
+.page7 {
   .plane {
     left: 50%;
     bottom: 7%;

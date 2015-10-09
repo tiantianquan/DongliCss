@@ -20,11 +20,9 @@ class BgTransform {
 
   addCss() {
     this.el.css('-webkit-transform', 'translateX(-' + this.tranformWidth + 'px' + ')')
-    console.log(this.tranformWidth, 1)
   }
   removeCss() {
     this.el.css('-webkit-transform', 'translateX(0)')
-    console.log(this.tranformWidth, 2)
   }
 }
 
@@ -40,7 +38,8 @@ var timeout = (ms) => {
 
 
 //延时时间
-var timeDelay = 2000
+// var timeDelay = 2000
+var timeDelay = 100
 
 var addClass = (el, className, delay) => {
   return timeout(delay).then(() => {
@@ -122,33 +121,40 @@ $(document).ready(function() {
 
 
   pageBegin(2, function*(plane) {
-    $('.page2 .front').one('click', function() {
-        $('.page2 .front').removeClass('active')
-        plane.trigger('click')
-      })
-      //页面
-    for (var i = 1; i < 4; i++) {
-      yield addClass('.page2 .txt' + i, 'active', timeDelay)
-    }
+
+    //页面
+    yield addClass('.page2 .map', 'active', timeDelay)
+    yield addClass('.page2 .rect', 'active', timeDelay)
+    yield addClass('.page2 .txt3', 'active', timeDelay)
+    yield [
+      addClass('.page2 .paper', 'active', timeDelay),
+      addClass('.page2 .people', 'active', timeDelay)
+    ]
 
     //page2 plane
     yield addClass(plane, 'fly1', timeDelay)
-    yield addClass(plane, 'fly2', timeDelay + convertToMs(plane.css('transition-duration')))
     yield addClass('.page2 .front', 'active', timeDelay + convertToMs(plane.css('transition-duration')))
+    yield $('.page2 .front').one('click', () => {
+      setTimeout(() => {
+        plane.trigger('click')
+      }, timeDelay + convertToMs($('.page2 .front').css('transition-duration')))
+      $('.page2 .front').removeClass('active')
+    })
 
   })
 
   pageBegin(3, function*(plane) {
-    yield addClass('.page3 .background', 'active', timeDelay)
-    BgTransform.bt3.init().addCss()
+    // yield addClass('.page3 .background', 'active', timeDelay)
+    // BgTransform.bt3.init().addCss()
+    yield addClass('.kid', 'active', timeDelay)
+    yield addClass('.mom', 'active', timeDelay)
     yield addClass(plane, 'fly1', timeDelay)
-    yield addClass('.page3 .txt1', 'active', timeDelay)
   })
 
 
 
   pageBegin(4, function*(plane) {
-    BgTransform.bt3.removeCss()
+    // BgTransform.bt3.removeCss()
     yield addClass(plane, 'fly1', timeDelay)
     yield addClass('.weibo', 'active', timeDelay + convertToMs(plane.css('transition-duration')))
     yield click('.weibo').then(() => {
