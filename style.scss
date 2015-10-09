@@ -312,49 +312,66 @@ img {
 }
 
 //--------------
-.plane {
+.plane,.plane-bottom {
   z-index: 100;
   position: absolute;
   width: 50px;
 }
 
-.plane.show {
+.plane.show,.plane-bottom.show {
   visibility: visible;
   opacity: 1;
 }
 
-.plane.hide {
+.plane.hide,.plane-bottom.hide {
   visibility: hidden;
   opacity: 0;
 }
 
-.plane.flash {
+.plane-bottom.flash {
   @include animation(flash 1.0s ease-in alternate-reverse infinite);
 }
 
-.plane.show-entry {
+.plane.show-entry,.plane-bottom.show-entry {
   @include transition(all 1s);
 }
 
-.page1 {
-  .plane {
-    left: 50%;
-    bottom: 7%;
-    @include transform(translateX(-50%));
-    font-size: 12px;
-    .plane-txt {
-      line-height: 20px;
-    }
-  }
-  .plane.fly-out {
-    @include transition(all 1s);
-    @include transform(translateX(200px) translateY(-200px));
-    .plane-txt {
-      visibility: hidden;
-    }
+.plane-bottom {
+  left: 50%;
+  bottom: 7%;
+  @include transform(translateX(-50%));
+  font-size: 12px;
+  .plane-txt {
+    line-height: 20px;
   }
 }
 
+.plane-bottom.fly-out {
+  @include transition(all 1s);
+  @include transform(translateX(300px) translateY(-200px));
+  .plane-txt {
+    visibility: hidden;
+  }
+}
+
+// .page1 {
+//   .plane {
+//     left: 50%;
+//     bottom: 7%;
+//     @include transform(translateX(-50%));
+//     font-size: 12px;
+//     .plane-txt {
+//       line-height: 20px;
+//     }
+//   }
+//   .plane.fly-out {
+//     @include transition(all 1s);
+//     @include transform(translateX(200px) translateY(-200px));
+//     .plane-txt {
+//       visibility: hidden;
+//     }
+//   }
+// }
 .page2 {
   .plane {
     left: -100px;
@@ -367,7 +384,7 @@ img {
   }
   .plane.fly-out {
     @include transition(all 1s);
-    @include transform(translateX(600px) translateY(-200px))
+    @include transform(translateX(600px) translateY(-400px))
   }
 }
 
