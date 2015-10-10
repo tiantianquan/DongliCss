@@ -23,20 +23,56 @@ body {
   overflow: hidden;
 }
 
+//loading
+.loading {
+  background-color: #e3e7ec;
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 0 auto;
+  display: block;
+  height: 100%;
+  width: 100%;
+  z-index: 10000;
+}
+
+.wrapper {
+  width: 100px;
+  height: 100px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  .logo.bg {
+    position: absolute;
+    top: 0;
+    z-index: 10010;
+    animation: rotating 1.2s linear infinite;
+  }
+  .logo.front {
+    @include center;
+    width: 80%;
+    z-index: 10020;
+  }
+}
+
+//audio
 .audio-wrapper {
   position: absolute;
   right: 20px;
   top: 20px;
-  z-index: 10000;
+  z-index: 1000;
   width: 30px;
   height: 30px;
   background-repeat: no-repeat;
-  background-image: url(./images/normalmusic.svg);
+  background-image: url("/images/normalmusic.svg");
   background-size: contain;
 }
 
 .rotate {
-  @include animation(rotating 1.2s linear infinite);
+  animation: rotating 1.2s linear infinite;
 }
 
 @include keyframes(rotating) {
@@ -228,6 +264,7 @@ img {
 
 //page5
 .page5 {
+  // @include edit;
   .front {
     position: absolute;
     bottom: 0;
@@ -256,13 +293,17 @@ img {
     @include center;
     width: 100%;
     .video {
+      background-color: #ccc;
       width: 100%;
       height: 200px;
-      background-color: #444;
       margin-bottom: 10%;
       iframe {
-        width: 100%;
+        position: relative;
+        left: 5%;
+        width: 90%;
         height: 100%;
+        display: block;
+        border: none;
       }
     }
     .txt {
@@ -446,23 +487,20 @@ img {
 .page5 {
   // @include edit;
   .plane {
-    left: 0;
+    left: -100px;
     top: 50%;
-    @include transform(translateY(-50%));
   }
   .plane.fly1 {
     @include transition(all 1s);
-    top: 70%;
-    left: 50%;
+    @include transform(translateX(300px) translateY(100px));
   }
   .plane.fly2 {
     @include transition(all 2s);
-    top: 30%;
-    left: 20%;
+    @include transform(translateX(300px) translateY(-150px));
   }
   .plane.fly-out {
     @include transition(all 1s);
-    @include transform(translateX(400px) translateY(-200px))
+    @include transform(translateX(500px) translateY(-200px))
   }
 }
 

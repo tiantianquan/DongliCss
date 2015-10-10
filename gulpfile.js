@@ -20,7 +20,7 @@ gulp.task('watch', function() {
 })
 
 gulp.task('serve', function() {
-  exec('webpack-dev-server -h --inline -d')
+  exec('webpack-dev-server -h --inline -d --host 127.0.0.1 --port 8080')
   gulp.run('watch')
 })
 

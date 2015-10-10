@@ -39,7 +39,8 @@ var timeout = (ms) => {
 
 //延时时间
 // var timeDelay = 2000
-var timeDelay = 500
+var timeDelay = 1500
+// var timeDelay = 0
 
 var addClass = (el, className, delay) => {
   return timeout(delay).then(() => {
@@ -112,7 +113,11 @@ var pageBegin = (pageNum, cb) => {
   })
 }
 
-$(document).ready(function() {
+// $(document).ready(function() {
+$(window).on('load', function() {
+  $('.video').hide()
+  $('.loading').hide()
+
   var planeBot = $('.plane-bottom')
   var planeTxt = $('.plane-txt')
 
@@ -120,11 +125,11 @@ $(document).ready(function() {
   var bgAudio = $('.bg-audio')[0]
   var audioWrapper = $('.audio-wrapper')
 
-  audioWrapper.click(()=>{
-    if(bgAudio.paused){
+  audioWrapper.click(() => {
+    if (bgAudio.paused) {
       audioWrapper.addClass('rotate')
       bgAudio.play()
-    }else{
+    } else {
       audioWrapper.removeClass('rotate')
       bgAudio.pause()
     }
@@ -202,6 +207,7 @@ $(document).ready(function() {
 
 
   pageBegin(6, function*(plane) {
+    $('.video').show()
     planeTxt.text('点击返回')
 
     BgTransform.bt5.removeCss()
@@ -215,6 +221,7 @@ $(document).ready(function() {
 
 
   pageBegin(7, function*(plane) {
+    $('.video').hide()
     planeTxt.text('再穿一次')
 
     plane.addClass('hide')
