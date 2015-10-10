@@ -40,7 +40,7 @@ var timeout = (ms) => {
 //延时时间
 // var timeDelay = 2000
 var timeDelay = 1500
-// var timeDelay = 0
+  // var timeDelay = 0
 
 var addClass = (el, className, delay) => {
   return timeout(delay).then(() => {
@@ -65,7 +65,11 @@ var click = (str) => {
   })
 }
 
-var convertToMs = (str) => parseFloat(str) * 1000
+var convertToMs = (str) => {
+  alert('str:' + str)
+  alert('parseFloat:' +  parseFloat)
+  return parseFloat(str) * 1000
+}
 
 //注册页面开始事件
 var pageBegin = (pageNum, cb) => {
@@ -98,10 +102,11 @@ var pageBegin = (pageNum, cb) => {
       yield timeout(convertToMs(plane.css('transition-duration')))
       yield addClass(planeBot, 'show-entry show', timeDelay)
       planeBot.removeClass('hide')
-      yield [removeClass(planeBot, 'show-entry', timeDelay), addClass(planeBot, 'flash', timeDelay)]
-      yield click(planeBot).then(() => {
-        planeBot.addClass('fly-out')
-      })
+      yield [removeClass(planeBot, 'show-entry', timeDelay), addClass(planeBot, 'flash', timeDelay),
+        click(planeBot).then(() => {
+          planeBot.addClass('fly-out')
+        })
+      ]
       yield timeout(convertToMs(planeBot.css('transition-duration'))).then(() => {
         plane.removeClass()
         plane.addClass('plane')
@@ -115,7 +120,7 @@ var pageBegin = (pageNum, cb) => {
 
 // $(document).ready(function() {
 $(window).on('load', function() {
-  $('.video').hide()
+  var videoEl = $('<div class="video"> <iframe src="http://www.tudou.com/programs/view/html5embed.action?type=0&code=WtRmrh5VYak&lcode=&resourceId=489764491_06_05_99" allowtransparency="true" allowfullscreen="true" allowfullscreenInteractive="true" scrolling="no"></iframe> </div>')
   $('.loading').hide()
 
   var planeBot = $('.plane-bottom')
@@ -138,6 +143,8 @@ $(window).on('load', function() {
 
 
   pageBegin(1, function*(plane) {
+
+    $('.page6 .video-wrapper').append(videoEl)
     planeTxt.text('点击进入')
     for (var i = 1; i < 6; i++) {
       yield addClass('.page1 .txt' + i, 'active', timeDelay)
@@ -207,7 +214,6 @@ $(window).on('load', function() {
 
 
   pageBegin(6, function*(plane) {
-    $('.video').show()
     planeTxt.text('点击返回')
 
     BgTransform.bt5.removeCss()
@@ -221,7 +227,7 @@ $(window).on('load', function() {
 
 
   pageBegin(7, function*(plane) {
-    $('.video').hide()
+    videoEl.remove()
     planeTxt.text('再穿一次')
 
     plane.addClass('hide')

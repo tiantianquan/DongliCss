@@ -9,7 +9,7 @@ var ExtractTextPlugin = require("extract-text-webpack-plugin")
 module.exports = {
   entry: {
     entry: [
-      'webpack/hot/dev-server',
+      // 'webpack/hot/dev-server',
       './script.js'
     ]
   },
@@ -32,8 +32,8 @@ module.exports = {
       loader: 'style-loader!css-loader'
     }, {
       test: /\.scss$/,
-      loader: 'style-loader!css-loader!sass-loader'
-      // loader: ExtractTextPlugin.extract('style-loader', 'css-loader!sass-loader')
+      // loader: 'style-loader!css-loader!sass-loader'
+      loader: ExtractTextPlugin.extract('style-loader', 'css-loader!sass-loader')
     }, {
       test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
       loader: "url-loader?limit=10000&minetype=application/font-woff"
