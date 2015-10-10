@@ -66,8 +66,6 @@ var click = (str) => {
 }
 
 var convertToMs = (str) => {
-  alert('str:' + str)
-  alert('parseFloat:' +  parseFloat)
   return parseFloat(str) * 1000
 }
 
@@ -99,7 +97,7 @@ var pageBegin = (pageNum, cb) => {
       if (pageNum == lastPageNum) {
         nextPage = 1
       }
-      yield timeout(convertToMs(plane.css('transition-duration')))
+      yield timeout(convertToMs(plane.css('-webkit-transition-duration')))
       yield addClass(planeBot, 'show-entry show', timeDelay)
       planeBot.removeClass('hide')
       yield [removeClass(planeBot, 'show-entry', timeDelay), addClass(planeBot, 'flash', timeDelay),
@@ -107,7 +105,7 @@ var pageBegin = (pageNum, cb) => {
           planeBot.addClass('fly-out')
         })
       ]
-      yield timeout(convertToMs(planeBot.css('transition-duration'))).then(() => {
+      yield timeout(convertToMs(planeBot.css('-webkit-transition-duration'))).then(() => {
         plane.removeClass()
         plane.addClass('plane')
         planeBot.removeClass()
@@ -164,7 +162,7 @@ $(window).on('load', function() {
     ]
 
     yield addClass(plane, 'fly1', timeDelay)
-    yield addClass('.page2 .front', 'active', timeDelay + convertToMs(plane.css('transition-duration')))
+    yield addClass('.page2 .front', 'active', timeDelay + convertToMs(plane.css('-webkit-transition-duration')))
     yield click('.page2 .front').then(() => {
       $('.page2 .front').removeClass('active')
     })
@@ -182,14 +180,14 @@ $(window).on('load', function() {
 
   pageBegin(4, function*(plane) {
     yield addClass(plane, 'fly1', timeDelay)
-    yield addClass('.weibo', 'active', timeDelay + convertToMs(plane.css('transition-duration')))
+    yield addClass('.weibo', 'active', timeDelay + convertToMs(plane.css('-webkit-transition-duration')))
     yield click('.weibo').then(() => {
       $('.weibo').removeClass('active')
     })
 
     yield [addClass('.page4 .background', 'active', timeDelay), addClass(plane, 'fly2', timeDelay)]
     BgTransform.bt4.init().addCss()
-    yield addClass('.phone', 'active', timeDelay + convertToMs(plane.css('transition-duration')))
+    yield addClass('.phone', 'active', timeDelay + convertToMs(plane.css('-webkit-transition-duration')))
 
     yield click('.phone').then(() => {
       $('.phone').removeClass('active')
@@ -205,7 +203,7 @@ $(window).on('load', function() {
     yield addClass(plane, 'fly1', timeDelay)
     yield [addClass('.page5 .background', 'active', timeDelay),
       addClass('.page5 .front', 'active', timeDelay),
-      addClass(plane, 'fly2', timeDelay + convertToMs(plane.css('transition-duration')))
+      addClass(plane, 'fly2', timeDelay + convertToMs(plane.css('-webkit-transition-duration')))
     ]
     BgTransform.bt5.init().addCss()
     yield addClass(plane, 'fly-out', timeDelay)
