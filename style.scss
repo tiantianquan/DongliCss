@@ -220,25 +220,6 @@ img {
   }
 }
 
-.front {
-  z-index: 1010;
-  visibility: hidden;
-  opacity: 0;
-  top: 50%;
-  left: 50%;
-  transform: translateX(-50%) translateY(-50%);
-}
-
-.front.active {
-  @include animation(fadeIn 1s);
-  visibility: visible;
-  opacity: 1;
-}
-
-.front.out {
-  @include animation(fadeOut 1s);
-}
-
 //page1
 .page1 {
   @include background(url("/images/1-bg1.jpg") center no-repeat);
@@ -273,6 +254,53 @@ img {
 .page2 {
   // @include edit;
   @include background(url("/images/2-bg1.jpg") center no-repeat);
+  .audio-circle {
+    position: absolute;
+    top: 65%;
+    right: 5%;
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    opacity: .6;
+    @include animation(audioCircle 1s infinite alternate)
+  }
+  .front {
+    z-index: 1010;
+    visibility: hidden;
+    opacity: 0;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+  }
+  .front.active {
+    @include animation(fadeIn 1s);
+    visibility: visible;
+    opacity: 1;
+  }
+  .front.out {
+    @include animation(fadeOut 1s);
+  }
+  @-webkit-keyframes audioCircle {
+    from {
+      @include transform(scale(.2,
+      .2));
+    }
+    to {
+      @include transform(scale(1,
+      1));
+    }
+  }
+  @keyframes audioCircle {
+    from {
+      @include transform(scale(.2,
+      .2));
+    }
+    to {
+      @include transform(scale(1,
+      1));
+    }
+  }
   img {
     position: absolute;
   }
@@ -347,46 +375,75 @@ img {
     visibility: visible;
     opacity: 1;
   }
-
-  video{
+  video {
     @include center;
     width: 100%;
-    z-index:1010;
+    z-index: 1010;
   }
 }
 
 //page4
 .page4 {
   // @include edit;
-  .phone {
-    @include transform(translateX(-50%));
+  .front {
+    @include transform(translateX(-50%) translateY(-50%));
     left: 50%;
     width: 80%;
-    top: 0;
+    top: 50%;
     position: absolute;
     visibility: hidden;
     opacity: 0;
     z-index: 1000;
     @include transition(all 2s);
   }
-  .weibo {
-    @include transform(translateX(-50%));
-    left: 50%;
-    width: 80%;
-    top: 0;
-    position: absolute;
-    visibility: hidden;
-    opacity: 0;
-    z-index: 1000;
-    @include transition(all 2s);
+  .phone-wrapper {
+    @include background(url("/images/phone-wrapper.png") center no-repeat);
+    background-size: contain !important;
+    width: 100%;
+    .phone {
+      top: 0;
+      width: 100%;
+      position: absolute;
+    }
+    .content {
+      position: relative;
+      padding-top: 70px;
+      padding-bottom: 70px;
+      padding-left: 5px;
+      width: 200px;
+      margin: 0 auto;
+    }
+    .content.hidden {
+      display: none;
+    }
   }
-  .weibo.active {
+  .txt {
+    position: absolute;
+    top: 15%;
+    width: 80%;
+    left: 50%;
+    opacity: 0;
+    visibility: hidden;
+    @include transform(translateX(-50%));
+  }
+  .txt.active {
     @include transition(all 2s);
     visibility: visible;
     opacity: 1;
   }
-  .phone.active {
+  .weibo {
+    @include transform(translateX(-50%));
+    top: 0;
+  }
+  .front.active {
     @include transition(all 2s);
+    visibility: visible;
+    opacity: 1;
+  }
+  .weibo.active {
+    @include transition(opacity 2s,
+    transform 2s 3s);
+    @include transform(translateX(-50%) translateY(-150%));
     visibility: visible;
     opacity: 1;
   }
@@ -395,7 +452,38 @@ img {
 //page5
 .page5 {
   // @include edit;
+  .txt {
+    position: absolute;
+    top: 15%;
+    width: 80%;
+    left: 50%;
+    opacity: 0;
+    visibility: hidden;
+    @include transform(translateX(-50%));
+    @include transition(all 2s);
+  }
+  .txt.active {
+    visibility: visible;
+    opacity: 1;
+  }
   .front {
+    position: absolute;
+    z-index: 1010;
+    visibility: hidden;
+    opacity: 0;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+  }
+  .front.active {
+    @include animation(fadeIn 1s);
+    visibility: visible;
+    opacity: 1;
+  }
+  .front.out {
+    @include animation(fadeOut 1s);
+  }
+  .car {
     position: absolute;
     bottom: 0;
     width: 30%;
@@ -452,11 +540,6 @@ img {
     .txt.head {
       width: 70%;
       margin-bottom: 10%;
-      @include transform(translateX(-$sideLong));
-    }
-    .txt.sub {
-      width: 30%;
-      margin-bottom: 5%;
       @include transform(translateX(-$sideLong));
     }
     .active {

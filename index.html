@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
-  <!-- <link rel="stylesheet" type="text/css" href="./dist/entry.css"> -->
+  <link rel="stylesheet" type="text/css" href="./dist/entry.css">
 </head>
 
 <body>
@@ -34,10 +34,12 @@
     </div>
   </section>
   <section class="page page2">
+    <audio src="audio/broadcast.mp3" preload class="broadcast"></audio>
     <div class="plane">
       <img src="images/plane2.png" alt="">
     </div>
     <div class="main">
+      <div class="audio-circle is-hidden"></div>
       <img src="images/2-txt1.png" alt="" class="txt txt3 mask">
       <img src="images/2-map.png" alt="" class="map mask">
       <img src="images/2-rect.png" alt="" class="rect mask">
@@ -52,7 +54,7 @@
       <img src="images/plane2.png" alt="">
     </div>
     <div class="main">
-      <video src="video/video.mp4" poster="images/video-poster.jpg" controls></video>
+      <video src="video/video.mp4" preload="none" poster="images/video-poster.jpg" controls class="is-hidden"></video>
       <img src="images/3-kid.png" alt="" class="kid trans">
       <img src="images/3-mom.png" alt="" class="mom trans">
     </div>
@@ -65,8 +67,16 @@
       <img src="images/4-bg1.jpg" class="background">
     </div>
     <div class="main">
-      <img src="images/phone2.png" alt="" class="front phone">
-      <img src="images/weibo.png" alt="" class="front weibo">
+      <img src="images/4-txt1.png" alt="" class="txt txt1">
+      <img src="images/4-txt2.png" alt="" class="txt txt2">
+      <img src="images/website.jpg" alt="" class="front website">
+      <img src="images/weibo.jpg" alt="" class="front weibo">
+      <div class="phone-wrapper front">
+        <!--         <img src="images/phone-wrapper.png" alt="" class="phone"> -->
+        <img src="images/phone-content1.jpg" alt="" class="content content1 hidden">
+        <img src="images/phone-content2.jpg" alt="" class="content content2 hidden">
+        <img src="images/phone-content3.jpg" alt="" class="content content3 hidden">
+      </div>
     </div>
   </section>
   <section class="page page5">
@@ -77,15 +87,22 @@
       <img src="images/5-bg1.jpg" class="background">
     </div>
     <div class="main">
-      <img src="images/car1.png" alt="" class="front car1">
-      <img src="images/car2.png" alt="" class="front car2">
+      <img src="images/5-txt1.png" alt="" class="txt1 txt">
+      <img src="images/5-txt2.png" alt="" class="txt txt2">
+      <img src="images/5-front1.jpg" alt="" class="front front1">
+      <img src="images/5-front2.jpg" alt="" class="front front2">
+      <img src="images/5-front3.jpg" alt="" class="front front3">
+      <img src="images/5-front4.jpg" alt="" class="front front4">
+      <img src="images/car1.png" alt="" class="car car1">
+      <img src="images/car2.png" alt="" class="car car2">
     </div>
   </section>
   <section class="page page6">
     <div class="main">
       <div class="video-wrapper">
+       
       </div>
-      <img src="images/6-txt1.png" alt="" class="txt sub">
+      <img src="images/6-txt1.png" alt="" class="txt head">
     </div>
   </section>
   <section class="page page7">
@@ -95,9 +112,9 @@
       <img src="images/qrcode.jpg" class="qrcode" alt="">
     </div>
   </section>
-  <script src="http://localhost:8080/webpack-dev-server.js"></script>
-  <!--<script type="text/javascript" src="./dist/bundle.js"></script>-->
-  <script type="text/javascript" src="bundle.js"></script>
+  <!--<script src="http://localhost:8080/webpack-dev-server.js"></script>-->
+  <script type="text/javascript" src="./dist/bundle.js"></script>
+  <!--<script type="text/javascript" src="bundle.js"></script>-->
 </body>
 
 </html>

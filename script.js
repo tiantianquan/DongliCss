@@ -40,7 +40,7 @@ var timeout = (ms) => {
 //延时时间
 // var timeDelay = 2000
 // var timeDelay = 1500
-var timeDelay = 1000
+var timeDelay = 1500
 
 var addClass = (el, className, delay) => {
   return timeout(delay).then(() => {
@@ -97,13 +97,26 @@ var pageBegin = (pageNum, cb) => {
       if (pageNum == lastPageNum) {
         nextPage = 1
       }
-      yield timeout(convertToMs(plane.css('-webkit-transition-duration')))
-      yield addClass(planeBot, 'show-entry show', timeDelay)
+      yield addClass(planeBot, 'show-entry show', 0)
       planeBot.removeClass('hide')
       yield [removeClass(planeBot, 'show-entry', timeDelay), addClass('.plane-bottom .plane-bgc', 'flash', timeDelay),
         click(planeBot).then(() => {
           $('.plane-bgc').hide()
           planeBot.addClass('fly-out')
+
+          //第二页暂停广播继续播放背景音乐
+          if (pageNum === 2) {
+            var bgAudio = $('.bg-audio')[0]
+            var broadcast = $('.broadcast')[0]
+            var audioWrapper = $('.audio-wrapper')
+            broadcast.pause()
+            bgAudio.play()
+            $('.audio-circle').addClass('is-hidden')
+            audioWrapper.addClass('rotate')
+          }
+          if (pageNum === 3) {
+            $('.page3 video').removeClass('is-show')
+          }
         })
       ]
       yield timeout(convertToMs(planeBot.css('-webkit-transition-duration'))).then(() => {
@@ -129,6 +142,7 @@ $(window).on('load', function() {
   //音频控制
   var bgAudio = $('.bg-audio')[0]
   var audioWrapper = $('.audio-wrapper')
+  var broadcast = $('.broadcast')[0]
 
   audioWrapper.click(() => {
     if (bgAudio.paused) {
@@ -155,53 +169,74 @@ $(window).on('load', function() {
     planeTxt.text('继续前进')
 
     //页面
-    // yield addClass('.page2 .map', 'active', timeDelay)
-    // yield addClass('.page2 .rect', 'active', timeDelay)
-    // yield addClass('.page2 .txt3', 'active', timeDelay)
     yield [
       addClass('.page2 .map', 'active', timeDelay),
       addClass('.page2 .rect', 'active', timeDelay),
       addClass('.page2 .txt3', 'active', timeDelay),
-      addClass('.page2 .paper', 'active', timeDelay),
-      addClass('.page2 .people', 'active', timeDelay)
+    ]
+    //广播
+    //暂停背景音乐
+    yield timeout(timeDelay)
+
+    bgAudio.pause()
+      //音频归位
+    broadcast.currentTime = 0
+    broadcast.play()
+    audioWrapper.removeClass('rotate')
+    $('.audio-circle').removeClass('is-hidden')
+
+    //报纸 人
+    yield [
+      addClass('.page2 .paper', 'active', timeDelay * 5),
+      addClass('.page2 .people', 'active', timeDelay * 5)
     ]
 
-    yield addClass(plane, 'fly1', timeDelay)
-    yield addClass('.page2 .front1', 'active', timeDelay + convertToMs(plane.css('-webkit-transition-duration')))
+    yield addClass(plane, 'fly1', timeDelay / 2)
+    yield addClass('.page2 .front1', 'active', convertToMs(plane.css('-webkit-transition-duration')))
     yield addClass('.page2 .front1', 'out', 3 * timeDelay)
     yield [removeClass('.page2 .front1', 'out active', timeDelay), addClass('.page2 .front2', 'active', 0)]
     yield addClass('.page2 .front2', 'out', 3 * timeDelay)
-    yield removeClass('.page2 .front2', 'out active', timeDelay)
-      // yield click('.page2 .front').then(() => {
-      //   $('.page2 .front').removeClass('active')
-      // })
-    yield addClass(plane, 'fly-out', timeDelay)
+    yield removeClass('.page2 .front2', 'out active', timeDelay / 2)
+    yield addClass(plane, 'fly-out', 0)
   })
 
   pageBegin(3, function*(plane) {
-    yield addClass('.kid', 'active', timeDelay)
     yield addClass('.mom', 'active', timeDelay)
+    yield addClass('.kid', 'active', timeDelay)
     yield addClass(plane, 'fly1', timeDelay)
+    yield timeout(convertToMs(plane.css('-webkit-transition-duration')))
+    $('.page3 video').addClass('is-show')
+    $('.page3 video')[0].currentTime = 0
+    $('.page3 video')[0].play()
     yield addClass(plane, 'fly-out', timeDelay)
   })
 
 
 
   pageBegin(4, function*(plane) {
+    yield addClass('.txt1', 'active', timeDelay)
     yield addClass(plane, 'fly1', timeDelay)
-    yield addClass('.weibo', 'active', timeDelay + convertToMs(plane.css('-webkit-transition-duration')))
-    yield click('.weibo').then(() => {
-      $('.weibo').removeClass('active')
-    })
+    yield addClass('.website', 'active', convertToMs(plane.css('-webkit-transition-duration')))
+    yield removeClass('.website', 'active', timeDelay * 3)
+    yield addClass('.weibo', 'active', convertToMs(plane.css('-webkit-transition-duration')))
+    yield timeout(2 * timeDelay)
+    $('.page4 .txt1').removeClass('active')
+    $('.page4 .txt2').addClass('active')
 
     yield [addClass('.page4 .background', 'active', timeDelay), addClass(plane, 'fly2', timeDelay)]
     BgTransform.bt4.init().addCss()
-    yield addClass('.phone', 'active', timeDelay + convertToMs(plane.css('-webkit-transition-duration')))
+    yield addClass('.phone-wrapper', 'active', timeDelay + convertToMs(plane.css('-webkit-transition-duration')))
+    $('.page4 .content1').removeClass('hidden')
+    yield timeout(timeDelay * 2)
+    $('.page4 .content1').addClass('hidden')
+    $('.page4 .content2').removeClass('hidden')
+    yield timeout(timeDelay * 2)
+    $('.page4 .content2').addClass('hidden')
+    $('.page4 .content3').removeClass('hidden')
 
-    yield click('.phone').then(() => {
-      $('.phone').removeClass('active')
-    })
-    yield addClass(plane, 'fly-out', timeDelay)
+    yield removeClass('.phone-wrapper', 'active', timeDelay)
+    yield addClass('.page4 .content3','hidden',timeDelay)
+    yield addClass(plane, 'fly-out', 0)
   })
 
 
@@ -209,13 +244,27 @@ $(window).on('load', function() {
   pageBegin(5, function*(plane) {
     BgTransform.bt4.removeCss()
 
-    yield addClass(plane, 'fly1', timeDelay)
-    yield [addClass('.page5 .background', 'active', timeDelay),
-      addClass('.page5 .front', 'active', timeDelay),
-      addClass(plane, 'fly2', timeDelay + convertToMs(plane.css('-webkit-transition-duration')))
+    yield [addClass('.page5 .car', 'active', 0),
+      addClass(plane, 'fly1', 0)
+    ]
+    yield [addClass('.txt1', 'active', timeDelay), addClass('.page5 .front1', 'active', timeDelay)]
+    yield addClass('.page5 .front1', 'out', 2 * timeDelay)
+    yield [removeClass('.page5 .front1', 'out active', timeDelay), addClass('.page5 .front2', 'active', 0)]
+    yield addClass('.page5 .front2', 'out', 2 * timeDelay)
+    yield removeClass('.page5 .front2', 'out active', timeDelay / 2)
+    yield [
+      addClass('.page5 .background', 'active', timeDelay / 2),
+      removeClass('.txt1', 'active', timeDelay / 2),
+      addClass('.txt2', 'active', timeDelay / 2),
+      addClass(plane, 'fly2', timeDelay / 2)
     ]
     BgTransform.bt5.init().addCss()
-    yield addClass(plane, 'fly-out', timeDelay)
+    yield addClass('.page5 .front3', 'active', timeDelay)
+    yield addClass('.page5 .front3', 'out', 2 * timeDelay)
+    yield [removeClass('.page5 .front3', 'out active', timeDelay), addClass('.page5 .front4', 'active', 0)]
+    yield addClass('.page5 .front4', 'out', 2 * timeDelay)
+    yield [removeClass('.page5 .front4', 'out active', timeDelay / 2), removeClass('.txt2', 'active', timeDelay / 2)]
+    yield addClass(plane, 'fly-out', 0)
   })
 
 
@@ -225,8 +274,7 @@ $(window).on('load', function() {
 
     BgTransform.bt5.removeCss()
     plane.addClass('hide')
-
-    yield addClass('.page6 .sub', 'active', timeDelay)
+    yield addClass('.page6 .head', 'active', timeDelay)
 
   })
 
@@ -243,7 +291,7 @@ $(window).on('load', function() {
   })
 
 
-  $('.page2').trigger('begin')
+  $('.page1').trigger('begin')
 
 
 })
