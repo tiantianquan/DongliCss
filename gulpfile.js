@@ -24,6 +24,10 @@ gulp.task('serve', function() {
   gulp.run('watch')
 })
 
+gulp.task('webpack',function(){
+  exec('webpack -p --config webpack.config.production.js')
+})
+
 gulp.task('connect', function() {
   connect.server({
     root: './',
