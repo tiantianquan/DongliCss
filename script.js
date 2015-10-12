@@ -39,8 +39,8 @@ var timeout = (ms) => {
 
 //延时时间
 // var timeDelay = 2000
-var timeDelay = 1500
-  // var timeDelay = 0
+// var timeDelay = 1500
+var timeDelay = 1000
 
 var addClass = (el, className, delay) => {
   return timeout(delay).then(() => {
@@ -153,19 +153,27 @@ $(window).on('load', function() {
     planeTxt.text('继续前进')
 
     //页面
-    yield addClass('.page2 .map', 'active', timeDelay)
-    yield addClass('.page2 .rect', 'active', timeDelay)
-    yield addClass('.page2 .txt3', 'active', timeDelay)
+    // yield addClass('.page2 .map', 'active', timeDelay)
+    // yield addClass('.page2 .rect', 'active', timeDelay)
+    // yield addClass('.page2 .txt3', 'active', timeDelay)
     yield [
+      addClass('.page2 .map', 'active', timeDelay),
+      addClass('.page2 .rect', 'active', timeDelay),
+      addClass('.page2 .txt3', 'active', timeDelay),
       addClass('.page2 .paper', 'active', timeDelay),
       addClass('.page2 .people', 'active', timeDelay)
     ]
 
     yield addClass(plane, 'fly1', timeDelay)
-    yield addClass('.page2 .front', 'active', timeDelay + convertToMs(plane.css('-webkit-transition-duration')))
-    yield click('.page2 .front').then(() => {
-      $('.page2 .front').removeClass('active')
-    })
+    yield addClass('.page2 .front1', 'active', timeDelay + convertToMs(plane.css('-webkit-transition-duration')))
+    yield addClass('.page2 .front1', 'out', 3 * timeDelay)
+    yield [removeClass('.page2 .front1', 'out active', timeDelay)
+    ,addClass('.page2 .front2', 'active', 0)]
+    yield addClass('.page2 .front2', 'out', 3 * timeDelay)
+    yield removeClass('.page2 .front2', 'out active', timeDelay)
+      // yield click('.page2 .front').then(() => {
+      //   $('.page2 .front').removeClass('active')
+      // })
     yield addClass(plane, 'fly-out', timeDelay)
   })
 

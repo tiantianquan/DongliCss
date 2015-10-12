@@ -17,6 +17,7 @@ $sideLong:500px;
 //解决移动端overflow不起作用问题
 html,
 body {
+  max-width: 500px;
   height: 100%;
   width: 100%;
   position: relative;
@@ -81,11 +82,11 @@ body {
   animation: rotating 1.2s linear infinite;
 }
 
+//animation
 @-webkit-keyframes rotating {
   from {
     -webkit-transform: rotate(0deg)
   }
-  
   to {
     -webkit-transform: rotate(360deg)
   }
@@ -95,7 +96,6 @@ body {
   from {
     transform: rotate(0deg)
   }
-  
   to {
     transform: rotate(360deg)
   }
@@ -105,9 +105,88 @@ body {
   from {
     -moz-transform: rotate(0deg)
   }
-  
   to {
     -moz-transform: rotate(360deg)
+  }
+}
+
+@keyframes fadeOutUp {
+  from {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-50%);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-150%);
+  }
+}
+
+@-webkit-keyframes fadeOutUp {
+  from {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-50%);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-150%);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(50%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-50%);
+  }
+}
+
+@-webkit-keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(50%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-50%);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@-webkit-keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@-webkit-keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
   }
 }
 
@@ -152,8 +231,11 @@ img {
     }
     .txt.head {
       width: 70%;
-      margin-bottom: 10%;
+      margin-bottom: 15%;
       @include transform(translateX($sideLong));
+    }
+    .txt.txt2 {
+      width: 45% !important;
     }
     .txt.sub {
       width: 30%;
@@ -183,7 +265,7 @@ img {
   .mask {
     -webkit-mask-image: -webkit-linear-gradient(right, rgba(0, 0, 0, 1), rgba(0, 0, 0, 1));
     -webkit-mask-repeat: no-repeat;
-    -webkit-mask-position: 250px 0;
+    -webkit-mask-position: 300px 0;
   }
   .paper {
     width: 30%;
@@ -211,7 +293,20 @@ img {
     @include transition(all 2s);
   }
   .front {
-    z-index: 1000;
+    z-index: 1010;
+    visibility: hidden;
+    opacity: 0;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+  }
+  .front.active {
+    @include animation(fadeIn 1s);
+    visibility: visible;
+    opacity: 1;
+  }
+  .front.out {
+    @include animation(fadeOut 1s);
   }
   //缓动
   .trans.active {
@@ -243,7 +338,6 @@ img {
     position: absolute;
     visibility: hidden;
     opacity: 0;
-    // @include transition(all 2s);
   }
   .active {
     @include transition(all 2s);
@@ -301,14 +395,24 @@ img {
   .car2 {
     left: 10%;
     bottom: 10%;
+    @include transform(translateX(-100px));
+  }
+  .car1 {
+    @include transform(translateX(-100px));
   }
   .car1.active {
-    @include transition(transform 1s);
-    @include transform(translateX($sideLong));
+    @include animation(carRun 2s infinite);
   }
   .car2.active {
-    @include transition(transform 1.5s);
-    @include transform(translateX($sideLong));
+    @include animation(carRun 2s infinite);
+  }
+  @keyframes carRun {
+    from {
+      @include transform(translateX(-100px));
+    }
+    100% {
+      @include transform(translateX($sideLong));
+    }
   }
 }
 
@@ -491,23 +595,20 @@ img {
 .page4 {
   // @include edit;
   .plane {
-    left: 0;
+    left: -100px;
     top: 50%;
-    @include transform(translateY(-50%));
   }
   .plane.fly1 {
     @include transition(all 1s);
-    top: 70%;
-    left: 10%;
+    @include transform(translateX(200px) translateY(100px))
   }
   .plane.fly2 {
     @include transition(all 2s);
-    top: 75%;
-    left: 50%;
+    @include transform(translateX(300px) translateY(150px))
   }
   .plane.fly-out {
     @include transition(all 1s);
-    @include transform(translateX(400px) translateY(-200px))
+    @include transform(translateX(600px) translateY(-400px))
   }
 }
 
