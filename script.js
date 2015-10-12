@@ -100,8 +100,9 @@ var pageBegin = (pageNum, cb) => {
       yield timeout(convertToMs(plane.css('-webkit-transition-duration')))
       yield addClass(planeBot, 'show-entry show', timeDelay)
       planeBot.removeClass('hide')
-      yield [removeClass(planeBot, 'show-entry', timeDelay), addClass(planeBot, 'flash', timeDelay),
+      yield [removeClass(planeBot, 'show-entry', timeDelay), addClass('.plane-bottom .plane-bgc', 'flash', timeDelay),
         click(planeBot).then(() => {
+          $('.plane-bgc').hide()
           planeBot.addClass('fly-out')
         })
       ]
@@ -110,6 +111,7 @@ var pageBegin = (pageNum, cb) => {
         plane.addClass('plane')
         planeBot.removeClass()
         planeBot.addClass('plane-bottom')
+        $('.plane-bgc').show()
         $('.page' + nextPage).trigger('begin')
       })
     })
@@ -167,8 +169,7 @@ $(window).on('load', function() {
     yield addClass(plane, 'fly1', timeDelay)
     yield addClass('.page2 .front1', 'active', timeDelay + convertToMs(plane.css('-webkit-transition-duration')))
     yield addClass('.page2 .front1', 'out', 3 * timeDelay)
-    yield [removeClass('.page2 .front1', 'out active', timeDelay)
-    ,addClass('.page2 .front2', 'active', 0)]
+    yield [removeClass('.page2 .front1', 'out active', timeDelay), addClass('.page2 .front2', 'active', 0)]
     yield addClass('.page2 .front2', 'out', 3 * timeDelay)
     yield removeClass('.page2 .front2', 'out active', timeDelay)
       // yield click('.page2 .front').then(() => {
@@ -225,7 +226,6 @@ $(window).on('load', function() {
     BgTransform.bt5.removeCss()
     plane.addClass('hide')
 
-    yield addClass('.page6 .head', 'active', timeDelay)
     yield addClass('.page6 .sub', 'active', timeDelay)
 
   })
@@ -243,7 +243,7 @@ $(window).on('load', function() {
   })
 
 
-  $('.page1').trigger('begin')
+  $('.page2').trigger('begin')
 
 
 })

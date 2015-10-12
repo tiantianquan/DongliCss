@@ -220,6 +220,25 @@ img {
   }
 }
 
+.front {
+  z-index: 1010;
+  visibility: hidden;
+  opacity: 0;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+}
+
+.front.active {
+  @include animation(fadeIn 1s);
+  visibility: visible;
+  opacity: 1;
+}
+
+.front.out {
+  @include animation(fadeOut 1s);
+}
+
 //page1
 .page1 {
   @include background(url("/images/1-bg1.jpg") center no-repeat);
@@ -260,7 +279,7 @@ img {
   .txt3 {
     top: 20%;
     left: 5%;
-    width: 30%;
+    width: 40%;
   }
   .mask {
     -webkit-mask-image: -webkit-linear-gradient(right, rgba(0, 0, 0, 1), rgba(0, 0, 0, 1));
@@ -291,22 +310,6 @@ img {
     visibility: hidden;
     opacity: 0;
     @include transition(all 2s);
-  }
-  .front {
-    z-index: 1010;
-    visibility: hidden;
-    opacity: 0;
-    top: 50%;
-    left: 50%;
-    transform: translateX(-50%) translateY(-50%);
-  }
-  .front.active {
-    @include animation(fadeIn 1s);
-    visibility: visible;
-    opacity: 1;
-  }
-  .front.out {
-    @include animation(fadeOut 1s);
   }
   //缓动
   .trans.active {
@@ -343,6 +346,12 @@ img {
     @include transition(all 2s);
     visibility: visible;
     opacity: 1;
+  }
+
+  video{
+    @include center;
+    width: 100%;
+    z-index:1010;
   }
 }
 
@@ -521,6 +530,10 @@ img {
   width: 50px;
 }
 
+.flash {
+  @include animation(flash 1.0s ease-in alternate-reverse infinite);
+}
+
 .plane.show,
 .plane-bottom.show {
   visibility: visible;
@@ -533,22 +546,47 @@ img {
   opacity: 0;
 }
 
-.plane-bottom.flash {
-  @include animation(flash 1.0s ease-in alternate-reverse infinite);
-}
-
 .plane.show-entry,
 .plane-bottom.show-entry {
   @include transition(all 1s);
 }
 
 .plane-bottom {
+  width: 90px;
+  .plane-wrapper {
+    position: relative;
+    width: 50px;
+    height: 50px;
+    margin: 0 auto;
+    .plane-bgc {
+      width: 100%;
+      height: 100%;
+      background-color: #ccc;
+      border: 2px solid #777;
+      border-radius: 50%;
+      @include transform(scale(0.7,
+      0.7));
+      opacity: 0.4;
+    }
+    img {
+      @include center;
+    }
+  }
   left: 50%;
-  bottom: 7%;
+  bottom: 5%;
   @include transform(translateX(-50%));
-  font-size: 12px;
   .plane-txt {
+    display: block;
+    margin: 0 auto;
+    text-align: center;
     line-height: 20px;
+    font-size: 14px;
+    font-weight: bolder;
+    color: #444;
+    font-family: '黑体';
+    background-color: #ccc;
+    border-radius: 10px;
+    margin: 5px;
   }
 }
 
@@ -647,9 +685,13 @@ img {
 
 @include keyframes(flash) {
   from {
-    opacity: 0.5;
+    @include transform(scale(0.7,
+    0.7));
+    opacity: .4;
   }
   to {
-    opacity: 1;
+    @include transform(scale(0.9,
+    0.9));
+    opacity: .4;
   }
 }
