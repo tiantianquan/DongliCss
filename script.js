@@ -157,8 +157,6 @@ $(window).on('load', function() {
     }
   })
 
-
-
   pageBegin(1, function*(plane) {
     planeTxt.text('点击进入')
     for (var i = 1; i < 6; i++) {

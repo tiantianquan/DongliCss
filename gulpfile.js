@@ -3,7 +3,14 @@ var exec = require('child_process').exec
 var livereload = require('gulp-livereload');
 var WebpackDevServer = require('webpack-dev-server')
 var connect = require('gulp-connect')
-var RevAll = require('gulp-rev-all');
+var RevAll = require('gulp-rev-all')
+var gutil = require("gulp-util");
+var webpack = require('webpack')
+var clean = require('gulp-clean')
+useref = require('gulp-useref')
+
+
+var productionConfig = require('./webpack.config.production')
 
 
 
@@ -15,7 +22,7 @@ gulp.task('html', function() {
 })
 
 gulp.task('watch', function() {
-  gulp.watch([dir + 'index.html'], function () {
+  gulp.watch([dir + 'index.html'], function() {
     gulp.run('html')
   })
   livereload.listen();
@@ -26,8 +33,27 @@ gulp.task('serve', function() {
   gulp.run('watch')
 })
 
-gulp.task('webpack',function(){
-  exec('webpack -p --config webpack.config.production.js')
+gulp.task('webpack', function() {
+
+  gulp.src('dist', {
+      read: false
+    })
+    .pipe(clean())
+
+
+  // exec('webpack -p --config webpack.config.production.js')
+  webpack(productionConfig, function(err, stats) {
+    if (err) throw new gutil.PluginError("webpack", err)
+    gutil.log("[webpack]", stats.toString())
+
+    // var assets = useref.assets();
+
+    // gulp.src('index.dev.html')
+    //   .pipe(assets)
+    //   .pipe(assets.restore())
+    //   .pipe(useref())
+    //   .pipe(gulp.dest('./index.html'));
+  })
 })
 
 gulp.task('connect', function() {

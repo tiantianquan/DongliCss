@@ -15,8 +15,7 @@ module.exports = {
   },
   output: {
     path: __dirname + '/dist/',
-    filename: 'bundle.js',
-    sourceMapFilename: '[file].map'
+    filename: 'bundle.[hash].js',
   },
   module: {
     loaders: [{
@@ -32,7 +31,6 @@ module.exports = {
       loader: 'style-loader!css-loader'
     }, {
       test: /\.scss$/,
-      // loader: 'style-loader!css-loader!sass-loader'
       loader: ExtractTextPlugin.extract('style-loader', 'css-loader!sass-loader')
     }, {
       test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
@@ -43,6 +41,8 @@ module.exports = {
     }],
   },
   plugins: [
-    new ExtractTextPlugin("[name].css")
+    new ExtractTextPlugin("[name].[contenthash].css"),
+    new webpack.optimize.DedupePlugin(),
+    new webpack.optimize.UglifyJsPlugin()
   ]
 }
