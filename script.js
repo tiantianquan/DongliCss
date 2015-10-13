@@ -40,7 +40,8 @@ var timeout = (ms) => {
 //延时时间
 // var timeDelay = 2000
 // var timeDelay = 1500
-var timeDelay = 1500
+var timeDelay = 1000
+var contentDur = 4000
 
 var addClass = (el, className, delay) => {
   return timeout(delay).then(() => {
@@ -134,6 +135,7 @@ var pageBegin = (pageNum, cb) => {
 // $(document).ready(function() {
 $(window).on('load', function() {
   var videoEl = $('<div class="video"> <iframe src="http://www.tudou.com/programs/view/html5embed.action?type=0&code=WtRmrh5VYak&lcode=&resourceId=489764491_06_05_99" allowtransparency="true" allowfullscreen="true" allowfullscreenInteractive="true" scrolling="no"></iframe> </div>')
+  var shortVideo = $(' <video src="video/video.mp4" preload="none" controls poster="images/video-poster.jpg" class="video is-hidden"></video>')
   $('.loading').hide()
 
   var planeBot = $('.plane-bottom')
@@ -141,6 +143,7 @@ $(window).on('load', function() {
 
   //音频控制
   var bgAudio = $('.bg-audio')[0]
+  bgAudio.play()
   var audioWrapper = $('.audio-wrapper')
   var broadcast = $('.broadcast')[0]
 
@@ -157,8 +160,6 @@ $(window).on('load', function() {
 
 
   pageBegin(1, function*(plane) {
-
-    $('.page6 .video-wrapper').append(videoEl)
     planeTxt.text('点击进入')
     for (var i = 1; i < 6; i++) {
       yield addClass('.page1 .txt' + i, 'active', timeDelay)
@@ -172,8 +173,9 @@ $(window).on('load', function() {
     yield [
       addClass('.page2 .map', 'active', timeDelay),
       addClass('.page2 .rect', 'active', timeDelay),
-      addClass('.page2 .txt3', 'active', timeDelay),
+      addClass('.page2 .txt3', 'active', timeDelay)
     ]
+
     //广播
     //暂停背景音乐
     yield timeout(timeDelay)
@@ -193,33 +195,35 @@ $(window).on('load', function() {
 
     yield addClass(plane, 'fly1', timeDelay / 2)
     yield addClass('.page2 .front1', 'active', convertToMs(plane.css('-webkit-transition-duration')))
-    yield addClass('.page2 .front1', 'out', 3 * timeDelay)
+    yield addClass('.page2 .front1', 'out', contentDur)
     yield [removeClass('.page2 .front1', 'out active', timeDelay), addClass('.page2 .front2', 'active', 0)]
-    yield addClass('.page2 .front2', 'out', 3 * timeDelay)
+    yield addClass('.page2 .front2', 'out', contentDur)
     yield removeClass('.page2 .front2', 'out active', timeDelay / 2)
     yield addClass(plane, 'fly-out', 0)
   })
 
   pageBegin(3, function*(plane) {
-    yield addClass('.mom', 'active', timeDelay)
-    yield addClass('.kid', 'active', timeDelay)
+    yield [addClass('.mom', 'active', timeDelay), addClass('.kid', 'active', timeDelay)]
     yield addClass(plane, 'fly1', timeDelay)
     yield timeout(convertToMs(plane.css('-webkit-transition-duration')))
-    $('.page3 video').addClass('is-show')
-    $('.page3 video')[0].currentTime = 0
-    $('.page3 video')[0].play()
+    $('.page3 .video-wrapper').append(shortVideo)
+    shortVideo.addClass('is-show')
+    shortVideo[0].currentTime = 0
+    shortVideo[0].play()
     yield addClass(plane, 'fly-out', timeDelay)
   })
 
 
 
   pageBegin(4, function*(plane) {
+    shortVideo.removeClass('is-show')
+    shortVideo.remove()
     yield addClass('.txt1', 'active', timeDelay)
     yield addClass(plane, 'fly1', timeDelay)
     yield addClass('.website', 'active', convertToMs(plane.css('-webkit-transition-duration')))
-    yield removeClass('.website', 'active', timeDelay * 3)
+    yield removeClass('.website', 'active', contentDur)
     yield addClass('.weibo', 'active', convertToMs(plane.css('-webkit-transition-duration')))
-    yield timeout(2 * timeDelay)
+    yield timeout(3 * timeDelay)
     $('.page4 .txt1').removeClass('active')
     $('.page4 .txt2').addClass('active')
 
@@ -227,15 +231,15 @@ $(window).on('load', function() {
     BgTransform.bt4.init().addCss()
     yield addClass('.phone-wrapper', 'active', timeDelay + convertToMs(plane.css('-webkit-transition-duration')))
     $('.page4 .content1').removeClass('hidden')
-    yield timeout(timeDelay * 2)
+    yield timeout(contentDur)
     $('.page4 .content1').addClass('hidden')
     $('.page4 .content2').removeClass('hidden')
-    yield timeout(timeDelay * 2)
-    $('.page4 .content2').addClass('hidden')
-    $('.page4 .content3').removeClass('hidden')
+      // yield timeout(contentDur)
+      // $('.page4 .content2').addClass('hidden')
+      // $('.page4 .content3').removeClass('hidden')
 
-    yield removeClass('.phone-wrapper', 'active', timeDelay)
-    yield addClass('.page4 .content3','hidden',timeDelay)
+    yield removeClass('.phone-wrapper', 'active', contentDur)
+    yield addClass('.page4 .content2', 'hidden', timeDelay)
     yield addClass(plane, 'fly-out', 0)
   })
 
@@ -248,9 +252,9 @@ $(window).on('load', function() {
       addClass(plane, 'fly1', 0)
     ]
     yield [addClass('.txt1', 'active', timeDelay), addClass('.page5 .front1', 'active', timeDelay)]
-    yield addClass('.page5 .front1', 'out', 2 * timeDelay)
+    yield addClass('.page5 .front1', 'out', contentDur)
     yield [removeClass('.page5 .front1', 'out active', timeDelay), addClass('.page5 .front2', 'active', 0)]
-    yield addClass('.page5 .front2', 'out', 2 * timeDelay)
+    yield addClass('.page5 .front2', 'out', contentDur)
     yield removeClass('.page5 .front2', 'out active', timeDelay / 2)
     yield [
       addClass('.page5 .background', 'active', timeDelay / 2),
@@ -260,9 +264,9 @@ $(window).on('load', function() {
     ]
     BgTransform.bt5.init().addCss()
     yield addClass('.page5 .front3', 'active', timeDelay)
-    yield addClass('.page5 .front3', 'out', 2 * timeDelay)
+    yield addClass('.page5 .front3', 'out', contentDur)
     yield [removeClass('.page5 .front3', 'out active', timeDelay), addClass('.page5 .front4', 'active', 0)]
-    yield addClass('.page5 .front4', 'out', 2 * timeDelay)
+    yield addClass('.page5 .front4', 'out', contentDur)
     yield [removeClass('.page5 .front4', 'out active', timeDelay / 2), removeClass('.txt2', 'active', timeDelay / 2)]
     yield addClass(plane, 'fly-out', 0)
   })
@@ -270,6 +274,7 @@ $(window).on('load', function() {
 
 
   pageBegin(6, function*(plane) {
+    $('.page6 .video-wrapper').append(videoEl)
     planeTxt.text('点击返回')
 
     BgTransform.bt5.removeCss()

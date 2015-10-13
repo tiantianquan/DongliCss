@@ -190,6 +190,24 @@ body {
   }
 }
 
+@keyframes flash {
+  from {
+    @include transform(scale(0.7, 0.7));
+  }
+  to {
+    @include transform(scale(0.9, 0.9));
+  }
+}
+
+@-webkit-keyframes flash {
+  from {
+    @include transform(scale(0.7, 0.7));
+  }
+  to {
+    @include transform(scale(0.9, 0.9));
+  }
+}
+
 img {
   display: block;
   width: 100%;
@@ -271,7 +289,7 @@ img {
     opacity: 0;
     top: 50%;
     left: 50%;
-    transform: translateX(-50%) translateY(-50%);
+    @include transform(translateX(-50%) translateY(-50%));
   }
   .front.active {
     @include animation(fadeIn 1s);
@@ -281,17 +299,7 @@ img {
   .front.out {
     @include animation(fadeOut 1s);
   }
-  @-webkit-keyframes audioCircle {
-    from {
-      @include transform(scale(.2,
-      .2));
-    }
-    to {
-      @include transform(scale(1,
-      1));
-    }
-  }
-  @keyframes audioCircle {
+  @include keyframes(audioCircle) {
     from {
       @include transform(scale(.2,
       .2));
@@ -312,7 +320,7 @@ img {
   .mask {
     -webkit-mask-image: -webkit-linear-gradient(right, rgba(0, 0, 0, 1), rgba(0, 0, 0, 1));
     -webkit-mask-repeat: no-repeat;
-    -webkit-mask-position: 300px 0;
+    -webkit-mask-position: 200px 0;
   }
   .paper {
     width: 30%;
@@ -346,8 +354,8 @@ img {
     opacity: 1;
   }
   .mask.active {
-    -webkit-mask-position: 0px 0;
-    @include transition(-webkit-mask-position 1s !important);
+    @include transition(-webkit-mask-position 2s !important);
+    @include transition(-webkit-mask-position 2s !important);
   }
 }
 
@@ -375,10 +383,16 @@ img {
     visibility: visible;
     opacity: 1;
   }
-  video {
-    @include center;
+  .video-wrapper {
+    position: relative;
+    padding-top: 50%;
+    margin-top: -25%;
+    z-index: 1050;
+  }
+  .video {
+    // @include center;
     width: 100%;
-    z-index: 1010;
+    // z-index: 1050;
   }
 }
 
@@ -442,7 +456,7 @@ img {
   }
   .weibo.active {
     @include transition(opacity 2s,
-    transform 2s 3s);
+    transform 2s 4s);
     @include transform(translateX(-50%) translateY(-150%));
     visibility: visible;
     opacity: 1;
@@ -460,9 +474,9 @@ img {
     opacity: 0;
     visibility: hidden;
     @include transform(translateX(-50%));
-    @include transition(all 2s);
   }
   .txt.active {
+    @include transition(all 2s);
     visibility: visible;
     opacity: 1;
   }
@@ -473,7 +487,7 @@ img {
     opacity: 0;
     top: 50%;
     left: 50%;
-    transform: translateX(-50%) translateY(-50%);
+    @include transform(translateX(-50%) translateY(-50%));
   }
   .front.active {
     @include animation(fadeIn 1s);
@@ -503,7 +517,7 @@ img {
   .car2.active {
     @include animation(carRun 2s infinite);
   }
-  @keyframes carRun {
+  @include keyframes(carRun) {
     from {
       @include transform(translateX(-100px));
     }
@@ -511,6 +525,14 @@ img {
       @include transform(translateX($sideLong));
     }
   }
+  // @-webkit-keyframes carRun {
+  //   from {
+  //     @include transform(translateX(-100px));
+  //   }
+  //   100% {
+  //     @include transform(translateX($sideLong));
+  //   }
+  // }
 }
 
 //page6
@@ -613,10 +635,6 @@ img {
   width: 50px;
 }
 
-.flash {
-  @include animation(flash 1.0s ease-in alternate-reverse infinite);
-}
-
 .plane.show,
 .plane-bottom.show {
   visibility: visible;
@@ -647,9 +665,10 @@ img {
       background-color: #ccc;
       border: 2px solid #777;
       border-radius: 50%;
-      @include transform(scale(0.7,
-      0.7));
+      // @include transform(scale(0.7,
+      // 0.7));
       opacity: 0.4;
+      @include animation(flash 1.0s alternate infinite);
     }
     img {
       @include center;
@@ -763,18 +782,5 @@ img {
   .plane.fly-out {
     @include transition(all 1s);
     @include transform(translateX(200px) translateY(-200px))
-  }
-}
-
-@include keyframes(flash) {
-  from {
-    @include transform(scale(0.7,
-    0.7));
-    opacity: .4;
-  }
-  to {
-    @include transform(scale(0.9,
-    0.9));
-    opacity: .4;
   }
 }

@@ -3,6 +3,8 @@ var exec = require('child_process').exec
 var livereload = require('gulp-livereload');
 var WebpackDevServer = require('webpack-dev-server')
 var connect = require('gulp-connect')
+var RevAll = require('gulp-rev-all');
+
 
 
 
