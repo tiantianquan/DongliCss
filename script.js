@@ -1,7 +1,9 @@
 var css = require('./style.scss')
 var $ = require('zeptojs')
 var co = require('co')
-require("babel/register")
+require('babel/register')
+
+var createjs = window.createjs
 
 //log err
 var Raven = require('raven-js')
@@ -136,9 +138,9 @@ var pageBegin = (pageNum, cb) => {
   })
 }
 
-// $(document).ready(function() {
-$(window).on('load', function() {
-  Raven.context(function() {
+
+var startPlay = () => {
+  Raven.context(() => {
     var videoEl = $('<div class="video"> <iframe src="http://www.tudou.com/programs/view/html5embed.action?type=0&code=WtRmrh5VYak&lcode=&resourceId=489764491_06_05_99" allowtransparency="true" allowfullscreen="true" allowfullscreenInteractive="true" scrolling="no"></iframe> </div>')
     var shortVideo = $(' <video src="video/video.mp4" preload="none" controls poster="images/video-poster.jpg" class="video is-hidden"></video>')
     $('.loading').hide()
@@ -148,7 +150,7 @@ $(window).on('load', function() {
 
     //音频控制
     var bgAudio = $('.bg-audio')[0]
-    bgAudio.play()
+    // bgAudio.play()
     var audioWrapper = $('.audio-wrapper')
     var broadcast = $('.broadcast')[0]
 
@@ -163,6 +165,7 @@ $(window).on('load', function() {
     })
 
     pageBegin(1, function*(plane) {
+      var event = yield step1Loader.loaded()
       planeTxt.text('点击进入')
       for (var i = 1; i < 6; i++) {
         yield addClass('.page1 .txt' + i, 'active', timeDelay)
@@ -303,4 +306,29 @@ $(window).on('load', function() {
 
 
   })
-})
+}
+
+//加载
+$(window).on('load', startPlay)
+
+var loadedProm = (loader) => {
+  return new Promise((resolve) => {
+    loader.on('fileload', resolve)
+  })
+}
+var step1Loader = new createjs.LoadQueue(true)
+step1Loader.setMaxConnections(2)
+
+createjs.Sound.registerPlugins([createjs.HTMLAudioPlugin])
+step1Loader.installPlugin(createjs.Sound);
+
+step1Loader.loaded = loadedProm(step1Loader)
+
+step1Loader.manifest = [{
+  src: 'loading-bg.png'
+}, {
+  src: 'loading-front.png'
+}]
+
+step1Loader.loadManifest(step1Loader.manifest, true, 'images')
+
