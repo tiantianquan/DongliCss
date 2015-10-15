@@ -68,8 +68,8 @@ class Preloader {
 
     //init
     this.loadQueue = new createjs.LoadQueue(true)
-    createjs.Sound.registerPlugins([createjs.HTMLAudioPlugin])
-    this.loadQueue.installPlugin(createjs.Sound)
+      // createjs.Sound.registerPlugins([createjs.HTMLAudioPlugin])
+      // this.loadQueue.installPlugin(createjs.Sound)
     this.loadQueue.setMaxConnections(this.manifest.length)
 
     this._onComplete()
@@ -188,39 +188,16 @@ Preloader.step2.onComplete((events) => {
   $('.page2').append($(broadcast))
   broadcast.load()
   var si = setInterval(() => {
-      try {
-          // console.log(bgAudio.buffered.end(0), broadcast.buffered.end(0))
-          // if (bgAudio.readyState === 4 && broadcast.readyState === 4) {
-        if (bgAudio.duration === bgAudio.buffered.end(0) && broadcast.duration === broadcast.buffered.end(0)) {
-          clearInterval(si)
-          bgAudio.play()
-          startPlay()
-          Preloader.step3.load()
-        }
-      } catch (e) {
-        console.log(e)
+      // console.log(bgAudio.buffered.end(0), broadcast.buffered.end(0))
+      if (bgAudio.readyState === 4 && broadcast.readyState === 4) {
+      // if (bgAudio.buffered.length != 0 && bgAudio.duration === bgAudio.buffered.end(0) && broadcast.duration === broadcast.buffered.end(0)) {
+        clearInterval(si)
+        bgAudio.play()
+        startPlay()
+        Preloader.step3.load()
       }
     },
     500)
-
-  // bgAudio.addEventListener('loadeddata',()=>{
-  //   console.log(bgAudio.readyState)
-  // })
-
-  // setTimeout(()=>{console.log(aaa.buffered.end(0))},1000)
-  // aaa.load()
-  // console.dir(aaa)
-
-  // var si = setInterval(() => {
-  //   console.log(bgAudio.buffered.end(0))
-  //   if (bgAudio.duration === bgAudio.buffered.end(0) && $('.broadcast')[0].duration === $('.broadcast')[0].buffered.end(0)) {
-  //     clearInterval(si)
-  //     si = 0
-  //     startPlay()
-  //     Preloader.step3.load()
-  //   }
-
-  // }, 500)
 
 })
 
@@ -342,7 +319,8 @@ var pageBegin = (pageNum, cb) => {
 var startPlay = (cb) => {
   Raven.context(() => {
     var videoEl = $('<div class="video"> <iframe src="http://www.tudou.com/programs/view/html5embed.action?type=0&code=WtRmrh5VYak&lcode=&resourceId=489764491_06_05_99" allowtransparency="true" allowfullscreen="true" allowfullscreenInteractive="true" scrolling="no"></iframe> </div>')
-    var shortVideo = $(' <video src="video/video.mp4" preload="none" controls poster="images/video-poster.jpg" class="video is-hidden"></video>')
+    var shortVideo = $(' <video src="video/video.mp4" preload="none" controls poster="images/video-poster.jpg" class="video is-hidden" webkit-playsinline></video> ')
+    shortVideo[0].load()
     $('.loading').hide()
 
     var planeBot = $('.plane-bottom')
@@ -390,6 +368,12 @@ var startPlay = (cb) => {
       audioWrapper.removeClass('rotate')
       $('.audio-circle').removeClass('is-hidden')
 
+      broadcast.addEventListener('ended', () => {
+        bgAudio.play()
+        $('.audio-circle').addClass('is-hidden')
+        audioWrapper.addClass('rotate')
+      })
+
       //报纸 人
       yield [
         addClass('.page2 .paper', 'active', timeDelay * 5),
@@ -413,6 +397,7 @@ var startPlay = (cb) => {
       shortVideo.addClass('is-show')
       shortVideo[0].currentTime = 0
       shortVideo[0].play()
+      bgAudio.play()
       yield addClass(plane, 'fly-out', timeDelay)
     })
 
@@ -489,6 +474,7 @@ var startPlay = (cb) => {
 
 
     pageBegin(7, function*(plane) {
+      bgAudio.play()
       videoEl.remove()
       planeTxt.text('再穿一次')
 
