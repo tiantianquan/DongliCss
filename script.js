@@ -312,6 +312,8 @@ $(window).on('load', () => {
   startPlay()
 })
 
+
+
 // var get = (url) => {
 //   return new Promise((resolve, reject) => {
 //     $.get(url, (res) => {
