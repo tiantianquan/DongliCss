@@ -154,7 +154,8 @@ Preloader.step4 = new Preloader([
     '6-txt1.png',
     '7-txt1.png',
     '7-txt2.png',
-    'qrcode.jpg'
+    'qrcode.jpg',
+    'title.jpg'
   ])
   //---------------------
 Preloader.step1.onComplete(() => {
@@ -190,7 +191,7 @@ Preloader.step2.onComplete((events) => {
   var si = setInterval(() => {
       // console.log(bgAudio.buffered.end(0), broadcast.buffered.end(0))
       if (bgAudio.readyState === 4 && broadcast.readyState === 4) {
-      // if (bgAudio.buffered.length != 0 && bgAudio.duration === bgAudio.buffered.end(0) && broadcast.duration === broadcast.buffered.end(0)) {
+        // if (bgAudio.buffered.length != 0 && bgAudio.duration === bgAudio.buffered.end(0) && broadcast.duration === broadcast.buffered.end(0)) {
         clearInterval(si)
         bgAudio.play()
         startPlay()
@@ -318,7 +319,8 @@ var pageBegin = (pageNum, cb) => {
 
 var startPlay = (cb) => {
   Raven.context(() => {
-    var videoEl = $('<div class="video"> <iframe src="http://www.tudou.com/programs/view/html5embed.action?type=0&code=WtRmrh5VYak&lcode=&resourceId=489764491_06_05_99" allowtransparency="true" allowfullscreen="true" allowfullscreenInteractive="true" scrolling="no"></iframe> </div>')
+    // var videoEl = $('<div class="video"> <iframe src="http://www.tudou.com/programs/view/html5embed.action?type=0&code=WtRmrh5VYak&lcode=&resourceId=489764491_06_05_99" allowtransparency="true" allowfullscreen="true" allowfullscreenInteractive="true" scrolling="no"></iframe> </div>')
+    var videoEl = $('<div class="video"><iframe frameborder="0" src="http://v.qq.com/iframe/player.html?vid=n0168ff67xt&tiny=0&auto=1" allowfullscreen></iframe></div>')
     var shortVideo = $(' <video src="video/video.mp4" preload="none" controls poster="images/video-poster.jpg" class="video is-hidden" webkit-playsinline></video> ')
     shortVideo[0].load()
     $('.loading').hide()
@@ -354,25 +356,46 @@ var startPlay = (cb) => {
       yield [
         addClass('.page2 .map', 'active', timeDelay),
         addClass('.page2 .rect', 'active', timeDelay),
-        addClass('.page2 .txt3', 'active', timeDelay)
+        addClass('.page2 .txt3', 'active', timeDelay),
+        timeout(timeDelay).then(() => {
+          bgAudio.pause()
+            // alert(1, bgAudio.paused)
+          audioWrapper.removeClass('rotate')
+            //音频归位
+          broadcast.currentTime = 0
+          broadcast.play()
+
+          $('.audio-circle').removeClass('is-hidden')
+
+          broadcast.addEventListener('ended', () => {
+            if (bgAudio.paused) {
+              bgAudio.play()
+            }
+            $('.audio-circle').addClass('is-hidden')
+            audioWrapper.addClass('rotate')
+          })
+        })
       ]
 
       //广播
       //暂停背景音乐
-      yield timeout(timeDelay)
+      // yield timeout(timeDelay)
+      // bgAudio.pause()
+      // alert(1, bgAudio.paused)
+      // audioWrapper.removeClass('rotate')
+      //   //音频归位
+      // broadcast.currentTime = 0
+      // broadcast.play()
 
-      bgAudio.pause()
-        //音频归位
-      broadcast.currentTime = 0
-      broadcast.play()
-      audioWrapper.removeClass('rotate')
-      $('.audio-circle').removeClass('is-hidden')
+      // $('.audio-circle').removeClass('is-hidden')
 
-      broadcast.addEventListener('ended', () => {
-        bgAudio.play()
-        $('.audio-circle').addClass('is-hidden')
-        audioWrapper.addClass('rotate')
-      })
+      // broadcast.addEventListener('ended', () => {
+      //   if (bgAudio.paused) {
+      //     bgAudio.play()
+      //   }
+      //   $('.audio-circle').addClass('is-hidden')
+      //   audioWrapper.addClass('rotate')
+      // })
 
       //报纸 人
       yield [
@@ -390,20 +413,29 @@ var startPlay = (cb) => {
     })
 
     pageBegin(3, function*(plane) {
+      bgAudio.play()
       yield [addClass('.mom', 'active', timeDelay), addClass('.kid', 'active', timeDelay)]
       yield addClass(plane, 'fly1', timeDelay)
-      yield timeout(convertToMs(plane.css('-webkit-transition-duration')))
-      $('.page3 .video-wrapper').append(shortVideo)
-      shortVideo.addClass('is-show')
-      shortVideo[0].currentTime = 0
-      shortVideo[0].play()
-      bgAudio.play()
+      yield timeout(convertToMs(plane.css('-webkit-transition-duration'))).then(() => {
+        $('.page3 .video-wrapper').append(shortVideo)
+        shortVideo.addClass('is-show')
+          // shortVideo[0].currentTime = 0
+        shortVideo[0].play()
+          // shortVideo[0].addEventListener('play', () => {
+          //   bgAudio.play()
+          // })
+          // shortVideo[0].addEventListener('playing', () => {
+          //   bgAudio.play()
+          // })
+        bgAudio.play()
+      })
       yield addClass(plane, 'fly-out', timeDelay)
     })
 
 
 
     pageBegin(4, function*(plane) {
+      bgAudio.play()
       shortVideo.removeClass('is-show')
       shortVideo.remove()
       yield addClass('.txt1', 'active', timeDelay)
@@ -462,6 +494,9 @@ var startPlay = (cb) => {
 
 
     pageBegin(6, function*(plane) {
+      bgAudio.pause()
+      audioWrapper.removeClass('rotate')
+
       $('.page6 .video-wrapper').append(videoEl)
       planeTxt.text('点击返回')
 
@@ -475,6 +510,8 @@ var startPlay = (cb) => {
 
     pageBegin(7, function*(plane) {
       bgAudio.play()
+      audioWrapper.addClass('rotate')
+
       videoEl.remove()
       planeTxt.text('再穿一次')
 
@@ -490,45 +527,3 @@ var startPlay = (cb) => {
 
   })
 }
-
-//加载
-// $(window).on('load', () => {
-//   startPlay()
-// })
-
-
-
-// var get = (url) => {
-//   return new Promise((resolve, reject) => {
-//     $.get(url, (res) => {
-//       resolve(res)
-//     })
-//   })
-// }
-
-// var loadedProm = (loader) => {
-//   return new Promise((resolve) => {
-//     loader.on('fileload', (event) => {
-//       resolve(event)
-//     })
-//   })
-// }
-
-
-
-
-// var step1Loader = new createjs.LoadQueue(true)
-// step1Loader.setMaxConnections(2)
-
-// createjs.Sound.registerPlugins([createjs.HTMLAudioPlugin])
-// step1Loader.installPlugin(createjs.Sound);
-
-// step1Loader.aaa = loadedProm(step1Loader)
-
-// step1Loader.manifest = [{
-//   src: 'loading-bg.png'
-// }, {
-//   src: 'loading-front.png'
-// }]
-
-// step1Loader.loadManifest(step1Loader.manifest, true, 'images/')
