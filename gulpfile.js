@@ -35,10 +35,10 @@ gulp.task('serve', function() {
 
 gulp.task('webpack', function() {
 
-  gulp.src('dist', {
-      read: false
-    })
-    .pipe(clean())
+  // gulp.src('dist', {
+  //     read: false
+  //   })
+  //   .pipe(clean())
 
 
   // exec('webpack -p --config webpack.config.production.js')
@@ -46,13 +46,6 @@ gulp.task('webpack', function() {
     if (err) throw new gutil.PluginError("webpack", err)
     gutil.log("[webpack]", stats.toString())
 
-    // var assets = useref.assets();
-
-    // gulp.src('index.dev.html')
-    //   .pipe(assets)
-    //   .pipe(assets.restore())
-    //   .pipe(useref())
-    //   .pipe(gulp.dest('./index.html'));
   })
 })
 

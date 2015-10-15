@@ -15,7 +15,7 @@ module.exports = {
   },
   output: {
     path: __dirname + '/dist/',
-    filename: 'bundle.[hash].js',
+    filename: 'bundle.js',
   },
   module: {
     loaders: [{
@@ -41,7 +41,8 @@ module.exports = {
     }],
   },
   plugins: [
-    new ExtractTextPlugin("[name].[contenthash].css"),
+    // new ExtractTextPlugin("[name].[contenthash].css"),
+    new ExtractTextPlugin("[name].css"),
     new webpack.optimize.DedupePlugin(),
     new webpack.optimize.UglifyJsPlugin()
   ]

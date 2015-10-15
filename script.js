@@ -9,6 +9,8 @@ var createjs = window.createjs
 var Raven = require('raven-js')
 Raven.config('https://af519d37286343ba8a18b50d2e15bbb2@app.getsentry.com/54864').install()
 
+//全局变量
+var bgAudio
 
 //背景缓动类
 class BgTransform {
@@ -35,6 +37,204 @@ class BgTransform {
 BgTransform.bt3 = new BgTransform('.page3 .background')
 BgTransform.bt4 = new BgTransform('.page4 .background')
 BgTransform.bt5 = new BgTransform('.page5 .background')
+
+class loadItem {
+  constructor(str) {
+    var strList = str.split('.')
+    var name = strList[0]
+    var ext = strList[1]
+    switch (ext) {
+      case 'jpg':
+        this.src = `images/${str}`
+        break
+      case 'png':
+        this.src = `images/${str}`
+        break
+      case 'mp3':
+        this.src = `audio/${str}`
+        break
+      default:
+        break
+    }
+    this.id = name
+  }
+}
+
+class Preloader {
+  constructor(manifest) {
+    this.manifest = manifest.map((str) => {
+      return new loadItem(str)
+    })
+
+    //init
+    this.loadQueue = new createjs.LoadQueue(true)
+    createjs.Sound.registerPlugins([createjs.HTMLAudioPlugin])
+    this.loadQueue.installPlugin(createjs.Sound)
+    this.loadQueue.setMaxConnections(this.manifest.length)
+
+    this._onComplete()
+
+    Preloader.list.push(this)
+    return this
+  }
+  onFileLoad(cb) {
+    this.loadQueue.on('fileload', cb)
+    return this
+  }
+  _onComplete() {
+    this.loadQueue.on('complete', (event) => {
+      var events = event.target.getItems()
+      events.forEach((event) => {
+        if (event.item.type === 'image') {
+          $(`#${event.item.id}`).attr('src', event.result.src)
+        }
+      })
+    })
+  }
+  onComplete(cb) {
+    this.loadQueue.on('complete', (event) => {
+      var events = event.target.getItems()
+      cb(events, event)
+    })
+    return this
+  }
+  load() {
+    this.loadQueue.loadManifest(this.manifest)
+  }
+}
+
+Preloader.list = []
+
+//loading
+Preloader.step1 = new Preloader([
+  'loading-bg.png',
+  'loading-front.png'
+])
+
+Preloader.step2 = new Preloader([
+  'plane2.png',
+  '1-txt1.png',
+  '1-txt2.png',
+  '1-txt3.png',
+  '1-txt4.png',
+  // 'bg2-lite.mp3',
+  // 'broadcast.mp3'
+])
+
+Preloader.step3 = new Preloader([
+  '2-txt1.png',
+  '2-map.png',
+  '2-rect.png',
+  '2-paper.png',
+  '2-people.png',
+  '2-front2.jpg',
+  '2-front1.jpg',
+  '3-kid.png',
+  '3-mom.png'
+])
+
+
+Preloader.step4 = new Preloader([
+    '4-bg1.jpg',
+    '4-txt1.png',
+    '4-txt2.png',
+    'website.jpg',
+    'weibo.jpg',
+    'phone-content1.jpg',
+    'phone-content2.jpg',
+    '5-bg1.jpg',
+    '5-txt1.png',
+    '5-txt2.png',
+    '5-front1.jpg',
+    '5-front2.jpg',
+    '5-front3.jpg',
+    '5-front4.jpg',
+    'car1.png',
+    'car2.png',
+    '6-txt1.png',
+    '7-txt1.png',
+    '7-txt2.png',
+    'qrcode.jpg'
+  ])
+  //---------------------
+Preloader.step1.onComplete(() => {
+  Preloader.step2.load()
+})
+
+Preloader.step2.onComplete((events) => {
+  console.log('complete')
+  events.forEach((event) => {
+    if (event.item.id === 'bg2-lite') {
+      bgAudio = event.result
+      $(bgAudio).addClass('bg-audio')
+      $('#bg2-lite').append($(bgAudio))
+      bgAudio.loop = true
+      bgAudio.play()
+    }
+    if (event.item.id === 'broadcast') {
+      $(event.result).addClass('broadcast')
+      $('.page2').append($(event.result))
+    }
+    if (event.item.id === 'plane2') {
+      $('.img-plane').attr('src', event.result.src)
+    }
+  })
+
+  bgAudio = $(' <audio class="bg-audio" src="audio/bg2-lite.mp3">')[0]
+  bgAudio.loop = true
+  $('#bg2-lite').append($(bgAudio))
+  bgAudio.load()
+  var broadcast = $('<audio src="audio/broadcast.mp3" class="broadcast">')[0]
+  $('.page2').append($(broadcast))
+  broadcast.load()
+  var si = setInterval(() => {
+      try {
+          // console.log(bgAudio.buffered.end(0), broadcast.buffered.end(0))
+          // if (bgAudio.readyState === 4 && broadcast.readyState === 4) {
+        if (bgAudio.duration === bgAudio.buffered.end(0) && broadcast.duration === broadcast.buffered.end(0)) {
+          clearInterval(si)
+          bgAudio.play()
+          startPlay()
+          Preloader.step3.load()
+        }
+      } catch (e) {
+        console.log(e)
+      }
+    },
+    500)
+
+  // bgAudio.addEventListener('loadeddata',()=>{
+  //   console.log(bgAudio.readyState)
+  // })
+
+  // setTimeout(()=>{console.log(aaa.buffered.end(0))},1000)
+  // aaa.load()
+  // console.dir(aaa)
+
+  // var si = setInterval(() => {
+  //   console.log(bgAudio.buffered.end(0))
+  //   if (bgAudio.duration === bgAudio.buffered.end(0) && $('.broadcast')[0].duration === $('.broadcast')[0].buffered.end(0)) {
+  //     clearInterval(si)
+  //     si = 0
+  //     startPlay()
+  //     Preloader.step3.load()
+  //   }
+
+  // }, 500)
+
+})
+
+Preloader.step3.onComplete(() => {
+  Preloader.step4.load()
+})
+
+
+//----------------------
+$(document).ready(() => {
+  Preloader.step1.load()
+})
+
+
 
 var timeout = (ms) => {
   return new Promise((resolve, reject) => {
@@ -149,8 +349,6 @@ var startPlay = (cb) => {
     var planeTxt = $('.plane-txt')
 
     //音频控制
-    var bgAudio = $('.bg-audio')[0]
-      // bgAudio.play()
     var audioWrapper = $('.audio-wrapper')
     var broadcast = $('.broadcast')[0]
 
@@ -308,9 +506,9 @@ var startPlay = (cb) => {
 }
 
 //加载
-$(window).on('load', () => {
-  startPlay()
-})
+// $(window).on('load', () => {
+//   startPlay()
+// })
 
 
 
