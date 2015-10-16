@@ -6,8 +6,8 @@ require('babel/register')
 var createjs = window.createjs
 
 //log err
-var Raven = require('raven-js')
-Raven.config('https://af519d37286343ba8a18b50d2e15bbb2@app.getsentry.com/54864').install()
+// var Raven = require('raven-js')
+// Raven.config('https://af519d37286343ba8a18b50d2e15bbb2@app.getsentry.com/54864').install()
 
 //全局变量
 var bgAudio
@@ -181,10 +181,10 @@ Preloader.step2.onComplete((events) => {
     }
   })
 
-  bgAudio = $(' <audio class="bg-audio" src="audio/bg2-lite.mp3">')[0]
-  bgAudio.loop = true
-  $('#bg2-lite').append($(bgAudio))
-  bgAudio.load()
+  // bgAudio = $(' <audio class="bg-audio" src="audio/bg2-lite.mp3">')[0]
+  // bgAudio.loop = true
+  // $('#bg2-lite').append($(bgAudio))
+  // bgAudio.load()
   var broadcast = $('<audio src="audio/broadcast.mp3" class="broadcast">')[0]
   $('.page2').append($(broadcast))
   broadcast.load()
@@ -210,6 +210,10 @@ Preloader.step3.onComplete(() => {
 //----------------------
 $(document).ready(() => {
   Preloader.step1.load()
+  bgAudio = $(' <audio class="bg-audio" src="audio/bg2-lite.mp3">')[0]
+  bgAudio.loop = true
+  $('#bg2-lite').append($(bgAudio))
+  bgAudio.load()
 })
 
 
@@ -291,7 +295,7 @@ var pageBegin = (pageNum, cb) => {
 
           //第二页暂停广播继续播放背景音乐
           if (pageNum === 2) {
-            var bgAudio = $('.bg-audio')[0]
+            bgAudio = $('.bg-audio')[0]
             var broadcast = $('.broadcast')[0]
             var audioWrapper = $('.audio-wrapper')
             broadcast.pause()
@@ -318,212 +322,223 @@ var pageBegin = (pageNum, cb) => {
 
 
 var startPlay = (cb) => {
-  Raven.context(() => {
-    // var videoEl = $('<div class="video"> <iframe src="http://www.tudou.com/programs/view/html5embed.action?type=0&code=WtRmrh5VYak&lcode=&resourceId=489764491_06_05_99" allowtransparency="true" allowfullscreen="true" allowfullscreenInteractive="true" scrolling="no"></iframe> </div>')
-    var videoEl = $('<div class="video"><iframe frameborder="0" src="http://v.qq.com/iframe/player.html?vid=n0168ff67xt&tiny=0&auto=1" allowfullscreen></iframe></div>')
-    var shortVideo = $(' <video src="video/video.mp4" preload="none" controls poster="images/video-poster.jpg" class="video is-hidden" webkit-playsinline></video> ')
-    shortVideo[0].load()
-    $('.loading').hide()
-
-    var planeBot = $('.plane-bottom')
-    var planeTxt = $('.plane-txt')
-
-    //音频控制
-    var audioWrapper = $('.audio-wrapper')
-    var broadcast = $('.broadcast')[0]
-
-    audioWrapper.click(() => {
+  document.addEventListener('touchstart', function() {
       if (bgAudio.paused) {
-        audioWrapper.addClass('rotate')
         bgAudio.play()
+        bgAudio.pause()
+
       } else {
+        bgAudio.pause()
+        bgAudio.play()
+      }
+    })
+    // var videoEl = $('<div class="video"> <iframe src="http://www.tudou.com/programs/view/html5embed.action?type=0&code=WtRmrh5VYak&lcode=&resourceId=489764491_06_05_99" allowtransparency="true" allowfullscreen="true" allowfullscreenInteractive="true" scrolling="no"></iframe> </div>')
+  var videoEl = $('<div class="video"><iframe frameborder="0" src="http://v.qq.com/iframe/player.html?vid=n0168ff67xt&tiny=0&auto=1" allowfullscreen></iframe></div>')
+  var shortVideo = $(' <video src="video/video.mp4" preload="none" controls poster="images/video-poster.jpg" class="video is-hidden" webkit-playsinline></video> ')
+  shortVideo[0].load()
+  $('.loading').hide()
+
+  var planeBot = $('.plane-bottom')
+  var planeTxt = $('.plane-txt')
+
+  //音频控制
+  var audioWrapper = $('.audio-wrapper')
+  var broadcast = $('.broadcast')[0]
+
+  audioWrapper.click(() => {
+    if (bgAudio.paused) {
+      audioWrapper.addClass('rotate')
+      bgAudio.play()
+    } else {
+      audioWrapper.removeClass('rotate')
+      bgAudio.pause()
+    }
+  })
+
+  pageBegin(1, function*(plane) {
+    planeTxt.text('点击进入')
+    for (var i = 1; i < 6; i++) {
+      yield addClass('.page1 .txt' + i, 'active', timeDelay)
+    }
+  })
+
+  pageBegin(2, function*(plane) {
+    planeTxt.text('继续前进')
+
+    //页面
+    yield [
+      addClass('.page2 .map', 'active', timeDelay),
+      addClass('.page2 .rect', 'active', timeDelay),
+      addClass('.page2 .txt3', 'active', timeDelay),
+      timeout(timeDelay).then(() => {
+        bgAudio = $('.bg-audio')[0]
         audioWrapper.removeClass('rotate')
         bgAudio.pause()
-      }
-    })
+        if (bgAudio.paused === false)
+          audioWrapper.trigger('click')
+          // alert(`3:${bgAudio.paused}`)
+          //音频归位
+        broadcast.currentTime = 0
+        broadcast.play()
 
-    pageBegin(1, function*(plane) {
-      planeTxt.text('点击进入')
-      for (var i = 1; i < 6; i++) {
-        yield addClass('.page1 .txt' + i, 'active', timeDelay)
-      }
-    })
+        $('.audio-circle').removeClass('is-hidden')
 
-    pageBegin(2, function*(plane) {
-      planeTxt.text('继续前进')
-
-      //页面
-      yield [
-        addClass('.page2 .map', 'active', timeDelay),
-        addClass('.page2 .rect', 'active', timeDelay),
-        addClass('.page2 .txt3', 'active', timeDelay),
-        timeout(timeDelay).then(() => {
-          bgAudio.pause()
-            // alert(1, bgAudio.paused)
-          audioWrapper.removeClass('rotate')
-            //音频归位
-          broadcast.currentTime = 0
-          broadcast.play()
-
-          $('.audio-circle').removeClass('is-hidden')
-
-          broadcast.addEventListener('ended', () => {
-            if (bgAudio.paused) {
-              bgAudio.play()
-            }
-            $('.audio-circle').addClass('is-hidden')
-            audioWrapper.addClass('rotate')
-          })
+        broadcast.addEventListener('ended', () => {
+          if (bgAudio.paused) {
+            bgAudio.play()
+          }
+          $('.audio-circle').addClass('is-hidden')
+          audioWrapper.addClass('rotate')
         })
-      ]
-
-      //广播
-      //暂停背景音乐
-      // yield timeout(timeDelay)
-      // bgAudio.pause()
-      // alert(1, bgAudio.paused)
-      // audioWrapper.removeClass('rotate')
-      //   //音频归位
-      // broadcast.currentTime = 0
-      // broadcast.play()
-
-      // $('.audio-circle').removeClass('is-hidden')
-
-      // broadcast.addEventListener('ended', () => {
-      //   if (bgAudio.paused) {
-      //     bgAudio.play()
-      //   }
-      //   $('.audio-circle').addClass('is-hidden')
-      //   audioWrapper.addClass('rotate')
-      // })
-
-      //报纸 人
-      yield [
-        addClass('.page2 .paper', 'active', timeDelay * 5),
-        addClass('.page2 .people', 'active', timeDelay * 5)
-      ]
-
-      yield addClass(plane, 'fly1', timeDelay / 2)
-      yield addClass('.page2 .front1', 'active', convertToMs(plane.css('-webkit-transition-duration')))
-      yield addClass('.page2 .front1', 'out', contentDur)
-      yield [removeClass('.page2 .front1', 'out active', timeDelay), addClass('.page2 .front2', 'active', 0)]
-      yield addClass('.page2 .front2', 'out', contentDur)
-      yield removeClass('.page2 .front2', 'out active', timeDelay / 2)
-      yield addClass(plane, 'fly-out', 0)
-    })
-
-    pageBegin(3, function*(plane) {
-      bgAudio.play()
-      yield [addClass('.mom', 'active', timeDelay), addClass('.kid', 'active', timeDelay)]
-      yield addClass(plane, 'fly1', timeDelay)
-      yield timeout(convertToMs(plane.css('-webkit-transition-duration'))).then(() => {
-        $('.page3 .video-wrapper').append(shortVideo)
-        shortVideo.addClass('is-show')
-          // shortVideo[0].currentTime = 0
-        shortVideo[0].play()
-          // shortVideo[0].addEventListener('play', () => {
-          //   bgAudio.play()
-          // })
-          // shortVideo[0].addEventListener('playing', () => {
-          //   bgAudio.play()
-          // })
-        bgAudio.play()
       })
-      yield addClass(plane, 'fly-out', timeDelay)
-    })
+    ]
 
+    //广播
+    //暂停背景音乐
+    // yield timeout(timeDelay)
+    // bgAudio.pause()
+    // alert(1, bgAudio.paused)
+    // audioWrapper.removeClass('rotate')
+    //   //音频归位
+    // broadcast.currentTime = 0
+    // broadcast.play()
 
+    // $('.audio-circle').removeClass('is-hidden')
 
-    pageBegin(4, function*(plane) {
+    // broadcast.addEventListener('ended', () => {
+    //   if (bgAudio.paused) {
+    //     bgAudio.play()
+    //   }
+    //   $('.audio-circle').addClass('is-hidden')
+    //   audioWrapper.addClass('rotate')
+    // })
+
+    //报纸 人
+    yield [
+      addClass('.page2 .paper', 'active', timeDelay * 5),
+      addClass('.page2 .people', 'active', timeDelay * 5)
+    ]
+
+    yield addClass(plane, 'fly1', timeDelay / 2)
+    yield addClass('.page2 .front1', 'active', convertToMs(plane.css('-webkit-transition-duration')))
+    yield addClass('.page2 .front1', 'out', contentDur)
+    yield [removeClass('.page2 .front1', 'out active', timeDelay), addClass('.page2 .front2', 'active', 0)]
+    yield addClass('.page2 .front2', 'out', contentDur)
+    yield removeClass('.page2 .front2', 'out active', timeDelay / 2)
+    yield addClass(plane, 'fly-out', 0)
+  })
+
+  pageBegin(3, function*(plane) {
+    bgAudio.play()
+    yield [addClass('.mom', 'active', timeDelay), addClass('.kid', 'active', timeDelay)]
+    yield addClass(plane, 'fly1', timeDelay)
+    yield timeout(convertToMs(plane.css('-webkit-transition-duration'))).then(() => {
+      $('.page3 .video-wrapper').append(shortVideo)
+      shortVideo.addClass('is-show')
+        // shortVideo[0].currentTime = 0
+      shortVideo[0].play()
+        // shortVideo[0].addEventListener('play', () => {
+        //   bgAudio.play()
+        // })
+        // shortVideo[0].addEventListener('playing', () => {
+        //   bgAudio.play()
+        // })
       bgAudio.play()
-      shortVideo.removeClass('is-show')
-      shortVideo.remove()
-      yield addClass('.txt1', 'active', timeDelay)
-      yield addClass(plane, 'fly1', timeDelay)
-      yield addClass('.website', 'active', convertToMs(plane.css('-webkit-transition-duration')))
-      yield removeClass('.website', 'active', contentDur)
-      yield addClass('.weibo', 'active', convertToMs(plane.css('-webkit-transition-duration')))
-      yield timeout(3 * timeDelay)
-      $('.page4 .txt1').removeClass('active')
-      $('.page4 .txt2').addClass('active')
-
-      yield [addClass('.page4 .background', 'active', timeDelay), addClass(plane, 'fly2', timeDelay)]
-      BgTransform.bt4.init().addCss()
-      yield addClass('.phone-wrapper', 'active', timeDelay + convertToMs(plane.css('-webkit-transition-duration')))
-      $('.page4 .content1').removeClass('hidden')
-      yield timeout(contentDur)
-      $('.page4 .content1').addClass('hidden')
-      $('.page4 .content2').removeClass('hidden')
-        // yield timeout(contentDur)
-        // $('.page4 .content2').addClass('hidden')
-        // $('.page4 .content3').removeClass('hidden')
-
-      yield removeClass('.phone-wrapper', 'active', contentDur)
-      yield addClass('.page4 .content2', 'hidden', timeDelay)
-      yield addClass(plane, 'fly-out', 0)
     })
+    yield addClass(plane, 'fly-out', timeDelay)
+  })
 
 
 
-    pageBegin(5, function*(plane) {
-      BgTransform.bt4.removeCss()
+  pageBegin(4, function*(plane) {
+    bgAudio.play()
+    shortVideo.removeClass('is-show')
+    shortVideo.remove()
+    yield addClass('.txt1', 'active', timeDelay)
+    yield addClass(plane, 'fly1', timeDelay)
+    yield addClass('.website', 'active', convertToMs(plane.css('-webkit-transition-duration')))
+    yield removeClass('.website', 'active', contentDur)
+    yield addClass('.weibo', 'active', convertToMs(plane.css('-webkit-transition-duration')))
+    yield timeout(3 * timeDelay)
+    $('.page4 .txt1').removeClass('active')
+    $('.page4 .txt2').addClass('active')
 
-      yield [addClass('.page5 .car', 'active', 0),
-        addClass(plane, 'fly1', 0)
-      ]
-      yield [addClass('.txt1', 'active', timeDelay), addClass('.page5 .front1', 'active', timeDelay)]
-      yield addClass('.page5 .front1', 'out', contentDur)
-      yield [removeClass('.page5 .front1', 'out active', timeDelay), addClass('.page5 .front2', 'active', 0)]
-      yield addClass('.page5 .front2', 'out', contentDur)
-      yield removeClass('.page5 .front2', 'out active', timeDelay / 2)
-      yield [
-        addClass('.page5 .background', 'active', timeDelay / 2),
-        removeClass('.txt1', 'active', timeDelay / 2),
-        addClass('.txt2', 'active', timeDelay / 2),
-        addClass(plane, 'fly2', timeDelay / 2)
-      ]
-      BgTransform.bt5.init().addCss()
-      yield addClass('.page5 .front3', 'active', timeDelay)
-      yield addClass('.page5 .front3', 'out', contentDur)
-      yield [removeClass('.page5 .front3', 'out active', timeDelay), addClass('.page5 .front4', 'active', 0)]
-      yield addClass('.page5 .front4', 'out', contentDur)
-      yield [removeClass('.page5 .front4', 'out active', timeDelay / 2), removeClass('.txt2', 'active', timeDelay / 2)]
-      yield addClass(plane, 'fly-out', 0)
-    })
+    yield [addClass('.page4 .background', 'active', timeDelay), addClass(plane, 'fly2', timeDelay)]
+    BgTransform.bt4.init().addCss()
+    yield addClass('.phone-wrapper', 'active', timeDelay + convertToMs(plane.css('-webkit-transition-duration')))
+    $('.page4 .content1').removeClass('hidden')
+    yield timeout(contentDur)
+    $('.page4 .content1').addClass('hidden')
+    $('.page4 .content2').removeClass('hidden')
+      // yield timeout(contentDur)
+      // $('.page4 .content2').addClass('hidden')
+      // $('.page4 .content3').removeClass('hidden')
 
-
-
-    pageBegin(6, function*(plane) {
-      bgAudio.pause()
-      audioWrapper.removeClass('rotate')
-
-      $('.page6 .video-wrapper').append(videoEl)
-      planeTxt.text('点击返回')
-
-      BgTransform.bt5.removeCss()
-      plane.addClass('hide')
-      yield addClass('.page6 .head', 'active', timeDelay)
-
-    })
+    yield removeClass('.phone-wrapper', 'active', contentDur)
+    yield addClass('.page4 .content2', 'hidden', timeDelay)
+    yield addClass(plane, 'fly-out', 0)
+  })
 
 
 
-    pageBegin(7, function*(plane) {
-      bgAudio.play()
-      audioWrapper.addClass('rotate')
+  pageBegin(5, function*(plane) {
+    BgTransform.bt4.removeCss()
 
-      videoEl.remove()
-      planeTxt.text('再穿一次')
+    yield [addClass('.page5 .car', 'active', 0),
+      addClass(plane, 'fly1', 0)
+    ]
+    yield [addClass('.txt1', 'active', timeDelay), addClass('.page5 .front1', 'active', timeDelay)]
+    yield addClass('.page5 .front1', 'out', contentDur)
+    yield [removeClass('.page5 .front1', 'out active', timeDelay), addClass('.page5 .front2', 'active', 0)]
+    yield addClass('.page5 .front2', 'out', contentDur)
+    yield removeClass('.page5 .front2', 'out active', timeDelay / 2)
+    yield [
+      addClass('.page5 .background', 'active', timeDelay / 2),
+      removeClass('.txt1', 'active', timeDelay / 2),
+      addClass('.txt2', 'active', timeDelay / 2),
+      addClass(plane, 'fly2', timeDelay / 2)
+    ]
+    BgTransform.bt5.init().addCss()
+    yield addClass('.page5 .front3', 'active', timeDelay)
+    yield addClass('.page5 .front3', 'out', contentDur)
+    yield [removeClass('.page5 .front3', 'out active', timeDelay), addClass('.page5 .front4', 'active', 0)]
+    yield addClass('.page5 .front4', 'out', contentDur)
+    yield [removeClass('.page5 .front4', 'out active', timeDelay / 2), removeClass('.txt2', 'active', timeDelay / 2)]
+    yield addClass(plane, 'fly-out', 0)
+  })
 
-      plane.addClass('hide')
-      yield addClass('.page7 .head', 'active', timeDelay)
-      yield addClass('.page7 .sub', 'active', timeDelay)
-      yield addClass('.page7 .qrcode', 'active', timeDelay)
-    })
 
 
-    $('.page1').trigger('begin')
+  pageBegin(6, function*(plane) {
+    bgAudio.pause()
+    audioWrapper.removeClass('rotate')
 
+    $('.page6 .video-wrapper').append(videoEl)
+    planeTxt.text('点击返回')
+
+    BgTransform.bt5.removeCss()
+    plane.addClass('hide')
+    yield addClass('.page6 .head', 'active', timeDelay)
 
   })
+
+
+
+  pageBegin(7, function*(plane) {
+    bgAudio.play()
+    audioWrapper.addClass('rotate')
+
+    videoEl.remove()
+    planeTxt.text('再穿一次')
+
+    plane.addClass('hide')
+    yield addClass('.page7 .head', 'active', timeDelay)
+    yield addClass('.page7 .sub', 'active', timeDelay)
+    yield addClass('.page7 .qrcode', 'active', timeDelay)
+  })
+
+
+  $('.page1').trigger('begin')
+
+
 }
