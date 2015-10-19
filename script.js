@@ -11,8 +11,7 @@ var createjs = window.createjs
 
 //全局变量
 var bgAudio
-
-//背景缓动类
+  //背景缓动类
 class BgTransform {
   constructor(str) {
     this.queryStr = str

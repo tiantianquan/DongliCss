@@ -71,7 +71,7 @@ body {
   width: 30px;
   height: 30px;
   background-repeat: no-repeat;
-  background-image: url("/images/normalmusic.svg");
+  background-image: url("./images/normalmusic.svg");
   background-size: contain;
 }
 
@@ -240,7 +240,7 @@ img {
 
 //page1
 .page1 {
-  @include background(url("/images/1-bg1.jpg") center no-repeat);
+  @include background(url("./images/1-bg1.jpg") center no-repeat);
   .main {
     @include center;
     width: 100%;
@@ -271,7 +271,7 @@ img {
 //page2
 .page2 {
   // @include edit;
-  @include background(url("/images/2-bg1.jpg") center no-repeat);
+  @include background(url("./images/2-bg1.jpg") center no-repeat);
   .audio-circle {
     position: absolute;
     top: 65%;
@@ -362,7 +362,7 @@ img {
 //page3
 .page3 {
   // @include edit;
-  @include background(url("/images/3-bg1.jpg") center no-repeat);
+  @include background(url("./images/3-bg1.jpg") center no-repeat);
   .kid {
     top: 60%;
     right: 10%;
@@ -411,7 +411,7 @@ img {
     @include transition(all 2s);
   }
   .phone-wrapper {
-    @include background(url("/images/phone-wrapper.png") center no-repeat);
+    @include background(url("./images/phone-wrapper.png") center no-repeat);
     background-size: contain !important;
     width: 100%;
     .phone {
@@ -538,7 +538,7 @@ img {
 //page6
 .page6 {
   // @include edit;
-  @include background(url("/images/1-bg1.jpg") center no-repeat);
+  @include background(url("./images/1-bg1.jpg") center no-repeat);
   .main {
     @include center;
     width: 100%;
@@ -573,7 +573,7 @@ img {
 
 //page7
 .page7 {
-  @include background(url("/images/1-bg1.jpg") center no-repeat);
+  @include background(url("./images/1-bg1.jpg") center no-repeat);
   // @include edit;
   .main {
     @include center;

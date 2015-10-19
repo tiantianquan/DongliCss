@@ -12,9 +12,6 @@ useref = require('gulp-useref')
 
 var productionConfig = require('./webpack.config.production')
 
-
-
-
 var dir = './'
 gulp.task('html', function() {
   gulp.src(dir + 'index.html')
@@ -35,25 +32,24 @@ gulp.task('serve', function() {
 
 gulp.task('webpack', function() {
 
-  // gulp.src('dist', {
-  //     read: false
-  //   })
-  //   .pipe(clean())
+    // gulp.src('dist', {
+    //     read: false
+    //   })
+    //   .pipe(clean())
+    // var assets = useref.assets();
 
+    // gulp.src('index-dev.html')
+    //   .pipe(assets)
+    //   .pipe(assets.restore())
+    //   .pipe(useref())
+    //   .pipe(gulp.dest('dist'));
 
-  // exec('webpack -p --config webpack.config.production.js')
-  webpack(productionConfig, function(err, stats) {
-    if (err) throw new gutil.PluginError("webpack", err)
-    gutil.log("[webpack]", stats.toString())
+    // exec('webpack -p --config webpack.config.production.js')
+    webpack(productionConfig, function(err, stats) {
+      if (err) throw new gutil.PluginError("webpack", err)
+      gutil.log("[webpack]", stats.toString())
 
+    })
   })
-})
-
-gulp.task('connect', function() {
-  connect.server({
-    root: './',
-  });
-});
-
-//default
+  //default
 gulp.task('default', ['serve'])
