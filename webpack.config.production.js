@@ -43,13 +43,13 @@ module.exports = {
     }],
   },
   plugins: [
-    new CleanDist(['./dist/bundle.*.js', './dist/*.css']),
+    new CleanDist(['./dist/bundle.*.js', './dist/*.css', './index.html']),
     new ExtractTextPlugin("[name].[contenthash].css"),
     // new ExtractTextPlugin("[name].css"),
     new webpack.optimize.DedupePlugin(),
     new webpack.optimize.UglifyJsPlugin(),
     new AssetsPlugin(),
-    new ReplaceRev()
+    new ReplaceRev(),
   ]
 }
 
@@ -74,13 +74,17 @@ function ReplaceRev(path) {
 }
 
 ReplaceRev.prototype.apply = function(compiler) {
-  var filename = JSON.parse(fs.readFileSync('webpack-assets.json'))
-  var indexFile = fs.readFileSync('index-dev.html').toString()
+  //done 是在所有文件压缩完触发
+  compiler.plugin('done', function(compilation, callback) {
+    var filename = JSON.parse(fs.readFileSync('webpack-assets.json'))
+    var indexFile = fs.readFileSync('index-dev.html').toString()
 
-  var result = indexFile.replace(/bundle.js/g, './dist/'+filename.entry.js)
-  .replace(/<script src="http:\/\/localhost:8080\/webpack-dev-server.js"><\/script>/g,'')
-  .replace(/<!-- <link rel="stylesheet" type="text\/css" href="\.\/dist\/entry.css"> -->/g,
-    '<link rel="stylesheet" type="text/css" href="./dist/' + filename.entry.css + '">')
+    var result = indexFile.replace(/bundle.js/g, './dist/' + filename.entry.js)
+      .replace(/<script src="http:\/\/localhost:8080\/webpack-dev-server.js"><\/script>/g, '')
+      .replace(/<!-- <link rel="stylesheet" type="text\/css" href="\.\/dist\/entry.css"> -->/g,
+        '<link rel="stylesheet" type="text/css" href="./dist/' + filename.entry.css + '">')
 
-  fs.writeFileSync('index.html',result)
+    fs.writeFile('index.html', result)
+  })
 }
+

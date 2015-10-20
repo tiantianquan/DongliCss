@@ -7,10 +7,14 @@ var RevAll = require('gulp-rev-all')
 var gutil = require("gulp-util");
 var webpack = require('webpack')
 var clean = require('gulp-clean')
-useref = require('gulp-useref')
+var useref = require('gulp-useref')
+var ftp = require('vinyl-ftp')
+var gutil = require('gulp-util')
+
 
 
 var productionConfig = require('./webpack.config.production')
+var secret = require('./secret')
 
 var dir = './'
 gulp.task('html', function() {
@@ -30,24 +34,42 @@ gulp.task('serve', function() {
   gulp.run('watch')
 })
 
+//向服务器自动部署
+gulp.task('deploy', function() {
+
+  var conn = ftp.create({
+    host: secret.ftp.host,
+    user: secret.ftp.user,
+    password: secret.ftp.password,
+    parallel: 10,
+    log: gutil.log
+  });
+
+  var globs = [
+    'dist/**',
+    'index.html'
+  ];
+
+  // using base = '.' will transfer everything to /public_html correctly
+  // turn off buffering in gulp.src for best performance
+
+  return gulp.src(globs, {
+      base: '.',
+      buffer: false
+    })
+    .pipe(conn.newer('/')) // only upload newer files
+    .pipe(conn.dest('/'));
+})
+
 gulp.task('webpack', function() {
-
-    // gulp.src('dist', {
-    //     read: false
-    //   })
-    //   .pipe(clean())
-    // var assets = useref.assets();
-
-    // gulp.src('index-dev.html')
-    //   .pipe(assets)
-    //   .pipe(assets.restore())
-    //   .pipe(useref())
-    //   .pipe(gulp.dest('dist'));
 
     // exec('webpack -p --config webpack.config.production.js')
     webpack(productionConfig, function(err, stats) {
       if (err) throw new gutil.PluginError("webpack", err)
       gutil.log("[webpack]", stats.toString())
+        //webpack结束
+
+      gulp.run('deploy')
 
     })
   })

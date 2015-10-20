@@ -5,9 +5,77 @@ require('babel/register')
 
 var createjs = window.createjs
 
-//log err
-// var Raven = require('raven-js')
-// Raven.config('https://af519d37286343ba8a18b50d2e15bbb2@app.getsentry.com/54864').install()
+var wxData = {
+  title: '东丽区媒体法治宣传',
+  // desc: '法治天津 法治政府 法治社会',
+  desc: 'http://tjdlpf.gov.cn/dlsf',
+  imgUrl: `${window.location.origin}${window.location.pathname}images/title.jpg`,
+  link: window.location.href.split('#')[0],
+  type: 'link',
+}
+
+//配置微信分享接口
+$.getJSON('api/Wx',(data) =>{
+  console.log(
+    `token:${data.testToken}`,`ticket:${data.testTicket};`
+  )
+  wx.config({
+    debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+    appId: data.appId, // 必填，公众号的唯一标识
+    timestamp: data.timestamp, // 必填，生成签名的时间戳
+    nonceStr: data.nonceStr, // 必填，生成签名的随机串
+    signature: data.signature, // 必填，签名，见附录1
+    jsApiList: [
+        'onMenuShareTimeline',
+        'onMenuShareAppMessage',
+        'onMenuShareQQ',
+        'onMenuShareWeibo',
+        'onMenuShareQZone'
+      ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+  })
+
+  wx.ready(() => {
+    //发送给朋友
+    wx.onMenuShareAppMessage({
+      title: wxData.title, // 分享标题
+      desc: wxData.desc, // 分享描述
+      link: wxData.link, // 分享链接
+      imgUrl: wxData.imgUrl, // 分享图标
+      type: wxData.type, // 分享类型,music、video或link，不填默认为link
+      // dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+      success: () => {},
+      cancel: () => {}
+    })
+
+    //分享到朋友圈
+    wx.onMenuShareTimeline({
+      title: wxData.title, // 分享标题
+      link: wxData.link, // 分享链接
+      imgUrl:wxData.imgUrl, // 分享图标
+      success: () => {
+        // 用户确认分享后执行的回调函数
+      },
+      cancel: () => {
+        // 用户取消分享后执行的回调函数
+      }
+    })
+    //分享到QQ
+    wx.onMenuShareQQ({
+      title: wxData.title, // 分享标题
+      desc: wxData.desc, // 分享描述
+      link: wxData.link, // 分享链接
+      imgUrl: wxData.imgUrl, // 分享图标
+      success: () => {
+        // 用户确认分享后执行的回调函数
+      },
+      cancel: () => {
+        // 用户取消分享后执行的回调函数
+      }
+    })
+  })
+  wx.error(() => {})
+})
+
 
 //全局变量
 var bgAudio
@@ -44,13 +112,13 @@ class loadItem {
     var ext = strList[1]
     switch (ext) {
       case 'jpg':
-        this.src = `images/${str}`
+        this.src = `./images/${str}`
         break
       case 'png':
-        this.src = `images/${str}`
+        this.src = `./images/${str}`
         break
       case 'mp3':
-        this.src = `audio/${str}`
+        this.src = `./audio/${str}`
         break
       default:
         break
@@ -154,7 +222,6 @@ Preloader.step4 = new Preloader([
     '7-txt1.png',
     '7-txt2.png',
     'qrcode.jpg',
-    'title.jpg'
   ])
   //---------------------
 Preloader.step1.onComplete(() => {
@@ -321,16 +388,17 @@ var pageBegin = (pageNum, cb) => {
 
 
 var startPlay = (cb) => {
-  document.addEventListener('touchstart', function() {
-      if (bgAudio.paused) {
-        bgAudio.play()
-        bgAudio.pause()
+  var listener = () => {
+    if (bgAudio.paused) {
+      bgAudio.play()
+      bgAudio.pause()
 
-      } else {
-        bgAudio.pause()
-        bgAudio.play()
-      }
-    })
+    } else {
+      bgAudio.pause()
+      bgAudio.play()
+    }
+  }
+  $(document).one('touchstart', listener)
     // var videoEl = $('<div class="video"> <iframe src="http://www.tudou.com/programs/view/html5embed.action?type=0&code=WtRmrh5VYak&lcode=&resourceId=489764491_06_05_99" allowtransparency="true" allowfullscreen="true" allowfullscreenInteractive="true" scrolling="no"></iframe> </div>')
   var videoEl = $('<div class="video"><iframe frameborder="0" src="http://v.qq.com/iframe/player.html?vid=n0168ff67xt&tiny=0&auto=1" allowfullscreen></iframe></div>')
   var shortVideo = $(' <video src="video/video.mp4" preload="none" controls poster="images/video-poster.jpg" class="video is-hidden" webkit-playsinline></video> ')
