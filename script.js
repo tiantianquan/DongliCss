@@ -610,5 +610,4 @@ var startPlay = (cb) => {
 
   $('.page1').trigger('begin')
 
-
 }
